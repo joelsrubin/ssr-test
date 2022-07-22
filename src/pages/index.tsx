@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { Table, ToDo } from "../components/Table";
+import { Typography } from "../dizzy/Typography";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Home: NextPage = () => {
@@ -47,10 +48,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4 sm:w-5/6">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700 hover:cursor-pointer ">
+        <Typography as="h1" color="orange600" size="xl">
           Todo App
-        </h1>
-        <div className="container flex flex-col justify-evenly items-center">
+        </Typography>
+        <div className="container flex flex-col justify-evenly items-center mt-10">
           <Table
             todos={clientSideTodos}
             handleDone={handleDone}

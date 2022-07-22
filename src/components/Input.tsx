@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "../dizzy/Button";
 import { ToDo } from "./Table";
 
 export function Input({
@@ -13,7 +14,7 @@ export function Input({
   return (
     <>
       <form
-        className="flex flex-row items-center justify-evenly gap-4 mt-4 text-lg"
+        className="flex flex-row items-center justify-evenly gap-4 mt-10 text-lg"
         onSubmit={(e) => {
           e.preventDefault();
           if (!text) {
@@ -41,12 +42,9 @@ export function Input({
             className="border rounded-lg p-4 w-full"
           />
         </div>
-        <button
-          className="bg-green-200 p-4 w-full rounded-md hover:bg-green-300 flex-1 align-bottom"
-          type="submit"
-        >
+        <Button color="orange" type="submit">
           Add
-        </button>
+        </Button>
       </form>
       <label className="text-left text-red-300 py-2">{error || null}</label>
     </>
