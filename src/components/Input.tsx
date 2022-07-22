@@ -1,8 +1,10 @@
 import React from "react";
+import { Button } from "../dizzy/Button";
+import { Input } from "../dizzy/Input";
 
 import { ToDo } from "./Table";
 
-export function Input({
+export function MyInput({
   addTodo,
   numTodos,
 }: {
@@ -23,22 +25,20 @@ export function Input({
         setText("");
       }}
     >
-      <input
+      <Input
         type="text"
         name="text"
         placeholder="Add a todo"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="border rounded-lg p-4 w-full"
+        variant="fill"
+        color="blue"
       />
-      <button
-        className="bg-green-200 p-4 w-full rounded-md hover:bg-green-300 flex-1"
-        type="submit"
-      >
+      <Button color="primary" size="sm" typeSize="md" type="submit">
         Add
-      </button>
+      </Button>
     </form>
   );
 }
 
-export default Input;
+export default MyInput;
