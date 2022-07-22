@@ -6,11 +6,11 @@ import { Table, ToDo } from "../components/Table";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Home: NextPage = () => {
-  const [serverSideTodos, setServerSideTodos] = useLocalStorage(
+  const [serverSideTodos, setServerSideTodos] = useLocalStorage<ToDo[]>(
     "todos",
-    [] as ToDo[]
+    []
   );
-  const [clientSideTodos, setClientSideTodos] = useState([] as ToDo[]);
+  const [clientSideTodos, setClientSideTodos] = useState<ToDo[]>([]);
 
   useEffect(() => {
     if (clientSideTodos.length === 0) {
@@ -46,8 +46,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
       </Head>
 
-      <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700 hover:cursor-pointer hover:drop-shadow-xl-cyan-500/50 ">
+      <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4 sm:w-5/6">
+        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700 hover:cursor-pointer ">
           Todo App
         </h1>
         <div className="container flex flex-col justify-evenly items-center">

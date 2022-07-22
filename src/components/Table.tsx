@@ -34,7 +34,7 @@ export const Table: React.FC<TTableProps> = ({
 }) => {
   return (
     <div className="table-container">
-      <table className="border w-full">
+      <table className="border">
         <thead className="border text-xl">
           <tr className="border">
             <th className="px-10 py-5">Todo</th>
@@ -48,8 +48,8 @@ export const Table: React.FC<TTableProps> = ({
               <tr key={todo.id}>
                 <td
                   className={`px-10 border ${
-                    todo.completed && "line-through decoration-4 text-gray-200"
-                  } transition-all duration-500 `}
+                    todo.completed && " text-gray-200"
+                  } transition-colors duration-200 `}
                 >
                   {todo.text}
                 </td>
@@ -58,9 +58,9 @@ export const Table: React.FC<TTableProps> = ({
                   onClick={() => handleDone(todo)}
                 >
                   {todo.completed ? (
-                    <span className="text-green-500 cursor-pointer">✅</span>
+                    <span className="cursor-pointer">✅</span>
                   ) : (
-                    <span className="text-red-500 cursor-pointer">❌</span>
+                    <span className="cursor-pointer">❌</span>
                   )}
                 </td>
                 <td className="px-10 py-5 border text-center ">
