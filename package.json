@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "dizzy": "yarn ladle dev --stories './src/dizzy/**/*.stories.tsx' --config ./src/dizzy/.ladle"
+    "lint": "next lint"
   },
   "dependencies": {
     "@stitches/react": "^1.2.8",
@@ -28,9 +27,5 @@
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.6",
     "typescript": "4.7.4"
-  },
-  "dizzy": {
-    "path": "./src/dizzy",
-    "token": "cl5wy2i34013709momqqkx4fr"
   }
 }

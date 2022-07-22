@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { Table, ToDo } from "../components/Table";
-import { Typography } from "../dizzy/Typography";
+
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Home: NextPage = () => {
