@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Typography } from "../dizzy/Typography";
 
 export type ToDo = {
   id: string;
@@ -37,9 +38,23 @@ export const Table: React.FC<TTableProps> = ({
       <table className="border w-full">
         <thead className="border text-xl">
           <tr className="border">
-            <th className="px-10 py-5">Todo</th>
-            <th className="px-10 py-5">Completed</th>
-            <th className="px-10 py-5">Delete</th>
+            <th className="px-10 py-5">
+              <Typography as="h4" color="neutral700" bold>
+                Todo
+              </Typography>
+            </th>
+            <th className="px-10 py-5">
+              {" "}
+              <Typography as="h4" color="neutral700" bold>
+                Completed
+              </Typography>
+            </th>
+            <th className="px-10 py-5">
+              {" "}
+              <Typography as="h4" color="neutral700" bold>
+                Delete
+              </Typography>
+            </th>
           </tr>
         </thead>
         <tbody className="text-lg">
@@ -51,7 +66,9 @@ export const Table: React.FC<TTableProps> = ({
                     todo.completed && "line-through decoration-4 text-gray-200"
                   } transition-all duration-500 `}
                 >
-                  {todo.text}
+                  <Typography as="h4" color="neutral700" bold>
+                    {todo.text}
+                  </Typography>
                 </td>
                 <td
                   className="px-10 py-5 border text-center"
