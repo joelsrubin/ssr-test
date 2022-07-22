@@ -31,7 +31,7 @@ export function MyInput({
         placeholder="Add a todo"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        variant="fill"
+        variant="flush"
         color="blue"
       />
       <Button color="primary" size="sm" typeSize="md" type="submit">
