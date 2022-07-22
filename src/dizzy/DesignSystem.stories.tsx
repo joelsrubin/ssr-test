@@ -436,7 +436,10 @@ export const Elevation = () => {
     >
       <Stack gap="1" dir="h" y-items="center">
         <Typography size="lg">Elevation</Typography>
-        <SubtleSelect.Root value={bgColor} onValueChange={(x) => setBgColor(x)}>
+        <SubtleSelect.Root
+          value={bgColor}
+          onValueChange={(x: any) => setBgColor(x)}
+        >
           <SubtleSelect.Trigger />
           <SubtleSelect.Content>
             <SubtleSelect.Viewport>
