@@ -32,9 +32,9 @@ export function MyInput({
         value={text}
         onChange={(e) => setText(e.target.value)}
         variant="contained"
-        color="blue"
+        color="neutral"
       />
-      <Button color="primary" size="sm" typeSize="md" type="submit">
+      <Button color="primary" size="md" typeSize="md" type="submit">
         Add
       </Button>
     </form>
