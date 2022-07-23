@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Typography } from "../dizzy/Typography";
-
+import { marked } from "marked";
+import DOMpurify from "dompurify";
 export type ToDo = {
   id: string;
   text: string;
@@ -66,9 +67,11 @@ export const Table: React.FC<TTableProps> = ({
                     todo.completed && "line-through decoration-4 text-gray-200"
                   } transition-all duration-500 `}
                 >
-                  <Typography as="h4" color="neutral700" bold>
-                    {todo.text}
-                  </Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMpurify.sanitize(marked.parse(todo.text)),
+                    }}
+                  ></div>
                 </td>
                 <td
                   className="px-10 py-5 border text-center"
