@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../dizzy/Button";
 import { Input } from "../dizzy/Input";
+import DOMPurify from "dompurify";
 
 import { ToDo } from "./Table";
 
@@ -17,12 +18,15 @@ export function MyInput({
       className="flex flex-row items-center justify-evenly gap-4 mt-4 text-lg"
       onSubmit={(e) => {
         e.preventDefault();
-        addTodo({
-          id: `${numTodos + 1}`,
-          text,
-          completed: false,
-        });
-        setText("");
+        const sanitized = DOMPurify.sanitize(text);
+        if (sanitized.length > 0) {
+          addTodo({
+            id: `${numTodos + 1}`,
+            text: sanitized,
+            completed: false,
+          });
+          setText("");
+        }
       }}
     >
       <Input

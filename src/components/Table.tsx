@@ -69,7 +69,7 @@ export const Table: React.FC<TTableProps> = ({
                 >
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: DOMpurify.sanitize(marked.parse(todo.text)),
+                      __html: marked.parse(todo.text),
                     }}
                   ></div>
                 </td>
