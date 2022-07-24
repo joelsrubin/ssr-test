@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
       </Head>
 
-      <main className="container mx-auto flex flex-col items-center justify-center h-screen p-4">
+      <main className="container flex flex-col items-center justify-center h-screen w-[110vw]">
         <Typography as="h1" size="xl" color="blue500" bold>
           Todo App
         </Typography>

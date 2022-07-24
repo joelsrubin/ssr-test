@@ -10,3 +10,7 @@ svg:hover {
   font-family: "MonoLisa";
   src: url("../../public/MonoLisa-Regular.otf");
 }
+
+main {
+  width: 80%;
+}

@@ -35,7 +35,7 @@ export const Table: React.FC<TTableProps> = ({
   deleteTodo,
 }) => {
   return (
-    <div className="table-container">
+    <div>
       <table className="border w-full">
         <thead className="border text-xl">
           <tr className="border">
