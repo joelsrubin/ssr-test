@@ -44,7 +44,7 @@ export const Table: React.FC<TTableProps> = ({
               >
                 <div
                   className={`cursor-pointer p-4 ${
-                    todo.completed && "line-through decoration-4 text-black"
+                    todo.completed && "line-through decoration-4 text-gray-500"
                   } transition-colors duration-500 `}
                   onClick={() => handleDone(todo)}
                   dangerouslySetInnerHTML={{

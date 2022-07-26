@@ -41,7 +41,7 @@ const Home: NextPage = () => {
           size="xl"
           color="blue500"
           bold
-          className="fixed top-0 mx-auto pt-10"
+          className="fixed top-0 mx-auto pt-10 z-100"
         >
           Todo App
         </Typography>
