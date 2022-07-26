@@ -21,7 +21,7 @@ export function MyInput({
         const sanitized = DOMPurify.sanitize(text);
         if (sanitized.length > 0) {
           addTodo({
-            id: `${numTodos + 1}`,
+            id: Math.random(),
             text: sanitized,
             completed: false,
           });
