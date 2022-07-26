@@ -16,7 +16,7 @@ type TTableProps = {
 
 function EmptyRow() {
   return (
-    <li className="flex flex-row">
+    <li className="flex flex-row justify-between">
       <div className="px-10 py-5 text-center">Add A Todo</div>
       <div className="px-10 py-5 text-center">
         <span>🫥</span>
@@ -52,7 +52,7 @@ export const Table: React.FC<TTableProps> = ({
                   }}
                 />
 
-                <div className="p-4">
+                <div className="p-4 min-h-25 min-w-25 shrink-0">
                   <button
                     className="cursor-pointer"
                     onClick={() => deleteTodo(todo)}
@@ -62,6 +62,7 @@ export const Table: React.FC<TTableProps> = ({
                       alt="delete"
                       height={25}
                       width={25}
+                      className="min-h-25 min-w-25 shrink-0"
                     />
                   </button>
                 </div>
