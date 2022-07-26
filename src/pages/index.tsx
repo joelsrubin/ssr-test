@@ -36,8 +36,14 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
       </Head>
 
-      <main className="container flex flex-col items-center justify-center h-screen w-[110vw]">
-        <Typography as="h1" size="xl" color="blue500" bold>
+      <main className="container flex flex-col items-center justify-center h-screen mx-auto">
+        <Typography
+          as="h1"
+          size="xl"
+          color="blue500"
+          bold
+          className="fixed top-0 mx-auto pt-10"
+        >
           Todo App
         </Typography>
         <div className="container flex flex-col justify-evenly items-center mt-2">

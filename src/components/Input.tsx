@@ -15,7 +15,7 @@ export function MyInput({
   const [text, setText] = React.useState("");
   return (
     <form
-      className="flex flex-row items-center justify-evenly gap-4 mt-4 text-lg"
+      className="flex flex-row items-center justify-evenly gap-4 mt-4 text-lg fixed bottom-0 pb-10"
       onSubmit={(e) => {
         e.preventDefault();
         const sanitized = DOMPurify.sanitize(text);
