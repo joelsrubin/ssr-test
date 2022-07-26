@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { Table, ToDo } from "../components/Table";
 import { GlobalStyles } from "../dizzy/GlobalStyles";
