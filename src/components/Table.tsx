@@ -64,60 +64,54 @@ export const Table: React.FC<TTableProps> = ({
 
   return (
     <div className="w-full">
-      <ul className="text-lg mx-auto border rounded-md w-1/2" ref={listRef}>
+      <ul
+        className="text-lg mx-auto border rounded-md w-1/2 sm:w-3/4"
+        ref={listRef}
+      >
         {todos.length ? (
           todos
             .sort((a, b) => +a.completed - +b.completed)
             .map((todo) => (
-              <>
-                <li
-                  key={todo.id}
-                  className="flex flex-row w-full justify-between odd:bg-gray-200"
-                  ref={dropDownRef}
-                >
-                  <div className="flex flex-row">
-                    <div
-                      className={`cursor-pointer p-4 ${
-                        todo.completed &&
-                        "line-through decoration-4 text-gray-500"
-                      } transition-colors duration-500 `}
-                      onClick={() => handleDone(todo)}
-                      dangerouslySetInnerHTML={{
-                        __html: marked.parse(todo.text),
-                      }}
+              <li
+                key={todo.id}
+                className="flex flex-row w-full justify-between odd:bg-gray-200"
+                ref={dropDownRef}
+              >
+                <div className="flex flex-row">
+                  <div
+                    className={`cursor-pointer p-4 ${
+                      todo.completed &&
+                      "line-through decoration-4 text-gray-500"
+                    } transition-colors duration-500 `}
+                    onClick={() => handleDone(todo)}
+                    dangerouslySetInnerHTML={{
+                      __html: marked.parse(todo.text),
+                    }}
+                  />
+                  <span
+                    className="cursor-pointer p-4"
+                    onClick={() => {
+                      handleClick(todo);
+                    }}
+                  >
+                    {/* {handleArrows(todo)} */}
+                  </span>
+                </div>
+                <div className="p-4 min-h-25 min-w-25 shrink-0">
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => deleteTodo(todo)}
+                  >
+                    <Image
+                      src="/trashcan.svg"
+                      alt="delete"
+                      height={25}
+                      width={25}
+                      className="min-h-25 min-w-25 shrink-0"
                     />
-                    <span
-                      className="cursor-pointer p-4"
-                      onClick={() => {
-                        handleClick(todo);
-                      }}
-                    >
-                      {/* {handleArrows(todo)} */}
-                    </span>
-                  </div>
-                  <div className="p-4 min-h-25 min-w-25 shrink-0">
-                    <button
-                      className="cursor-pointer"
-                      onClick={() => deleteTodo(todo)}
-                    >
-                      <Image
-                        src="/trashcan.svg"
-                        alt="delete"
-                        height={25}
-                        width={25}
-                        className="min-h-25 min-w-25 shrink-0"
-                      />
-                    </button>
-                  </div>
-                </li>
-                {/* {show &&
-                  selectedTodo === todo &&
-                  selectedTodo?.subTodos.map((todo) => (
-                    <li key={todo.id} className=" bg-slate-200 p-4">
-                      {todo.text}
-                    </li>
-                  ))} */}
-              </>
+                  </button>
+                </div>
+              </li>
             ))
         ) : (
           <EmptyRow />
@@ -126,3 +120,11 @@ export const Table: React.FC<TTableProps> = ({
     </div>
   );
 };
+
+/* {show &&
+                  selectedTodo === todo &&
+                  selectedTodo?.subTodos.map((todo) => (
+                    <li key={todo.id} className=" bg-slate-200 p-4">
+                      {todo.text}
+                    </li>
+                  ))} */
