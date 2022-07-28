@@ -24,6 +24,26 @@ export function MyInput({
             id: Math.random(),
             text: sanitized,
             completed: false,
+            subTodos: [
+              {
+                id: Math.random(),
+                text: "Add a sub-todo",
+                completed: false,
+                subTodos: [],
+              },
+              {
+                id: Math.random(),
+                text: "this is sub",
+                completed: false,
+                subTodos: [],
+              },
+              {
+                id: Math.random(),
+                text: "this is another sub",
+                completed: false,
+                subTodos: [],
+              },
+            ],
           });
           setText("");
         }

@@ -2,15 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-svg:hover {
-  fill: red;
-}
-
 @font-face {
   font-family: "MonoLisa";
   src: url("../../public/MonoLisa-Regular.otf");
-}
-
-main {
-  width: 80%;
 }

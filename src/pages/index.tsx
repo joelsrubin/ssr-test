@@ -35,7 +35,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
       </Head>
 
-      <main className="container flex flex-col items-center justify-center h-screen mx-auto">
+      <main className="flex flex-col items-center justify-center h-screen mx-auto">
         <Typography
           as="h1"
           size="xl"
@@ -45,7 +45,7 @@ const Home: NextPage = () => {
         >
           Todo App
         </Typography>
-        <div className="container flex flex-col justify-evenly items-center mt-2">
+        <div className="flex flex-col items-center w-full">
           <Table
             todos={todos}
             handleDone={handleDone}
