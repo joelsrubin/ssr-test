@@ -65,7 +65,7 @@ export const Table: React.FC<TTableProps> = ({
   return (
     <div className="w-full">
       <ul
-        className="text-lg mx-auto border rounded-md w-1/2 sm:w-3/4"
+        className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2"
         ref={listRef}
       >
         {todos.length ? (
