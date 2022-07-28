@@ -2,8 +2,10 @@ import Image from "next/image";
 import { marked } from "marked";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useState } from "react";
+
 import Down from "../../public/down.svg";
 import Up from "../../public/up.svg";
+
 export type ToDo = {
   id: number;
   text: string;
@@ -20,7 +22,7 @@ type TTableProps = {
 
 function EmptyRow() {
   return (
-    <li className="flex flex-row justify-between">
+    <li className="flex flex-row justify-center">
       <div className="px-10 py-5 text-center">Add A Todo</div>
       <div className="px-10 py-5 text-center">
         <span>🫥</span>
@@ -63,9 +65,9 @@ export const Table: React.FC<TTableProps> = ({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col items-center justify-center h-screen">
       <ul
-        className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2"
+        className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 max-h-96 sm:max-h-96 overflow-auto"
         ref={listRef}
       >
         {todos.length ? (

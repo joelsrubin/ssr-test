@@ -45,7 +45,7 @@ const Home: NextPage = () => {
         >
           Todo App
         </Typography>
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full max-h-1/2">
           <Table
             todos={todos}
             handleDone={handleDone}
