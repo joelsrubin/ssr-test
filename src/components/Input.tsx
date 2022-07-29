@@ -1,33 +1,42 @@
 import React from "react";
 import DOMPurify from "dompurify";
 
-import { ToDo } from "./List";
 import Share from "./Share";
 import toast from "react-hot-toast";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { TailSpin } from "react-loader-spinner";
 
-export function Input({
-  addTodo,
-  slug,
-}: {
-  slug: string | string[] | undefined;
-  addTodo: (todo: ToDo) => void;
-}) {
+export function Input({ slug }: { slug: string | string[] | undefined }) {
   const [text, setText] = React.useState("");
+
+  const client = useQueryClient();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const sanitized = DOMPurify.sanitize(text);
+    if (sanitized.length > 0) {
+      await fetch("/api/add-posts-to-slug", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          slug,
+          text: sanitized,
+          completed: false,
+        }),
+      });
+    }
+  };
+  const { mutate, isLoading } = useMutation(handleSubmit, {
+    onSuccess: () => {
+      setText("");
+      client.invalidateQueries(["todos"]);
+    },
+  });
   return (
     <form
       className="flex flex-row items-center justify-between px-4 py-5 text-lg"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const sanitized = DOMPurify.sanitize(text);
-        if (sanitized.length > 0) {
-          addTodo({
-            id: Math.random(),
-            text: sanitized,
-            completed: false,
-          });
-          setText("");
-        }
-      }}
+      onSubmit={mutate}
     >
       <input
         type="text"
@@ -38,12 +47,18 @@ export function Input({
         className="inherit outline-none bg-transparent"
       />
       <div className="flex flex-row justify-between w-1/6">
-        <button
-          type="submit"
-          className="hover:underline transition-all leading-6 duration-300"
-        >
-          Add
-        </button>
+        {isLoading ? (
+          <div>
+            <TailSpin height="20" width="20" color="gray" />
+          </div>
+        ) : (
+          <button
+            type="submit"
+            className="hover:underline transition-all leading-6 duration-300"
+          >
+            Add
+          </button>
+        )}
         <Share
           clickHandler={async () => {
             await navigator.clipboard.writeText(String(slug));

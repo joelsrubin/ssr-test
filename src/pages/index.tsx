@@ -3,23 +3,34 @@ import Head from "next/head";
 
 import { List, ToDo } from "../components/List";
 
-import { useLocalStorage } from "usehooks-ts";
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { generateSlug } from "random-word-slugs";
-
+import ContentEditable from "react-contenteditable";
 import { Toaster } from "react-hot-toast";
+import { useQuery, dehydrate, QueryClient } from "@tanstack/react-query";
+
+async function getTodos(slug: string | undefined | string[]) {
+  const response = await fetch(`/api/posts/${slug}`);
+  return await response.json();
+}
 
 const Home: NextPage = () => {
-  const [todos, setTodos] = useLocalStorage<ToDo[]>("todos", []);
-
+  const [todos, setTodos] = useState<ToDo[]>([]);
   const [slug, setSlug] = useState<undefined | string | string[]>();
 
+  useQuery<ToDo[]>(["todos"], () => getTodos(slug), {
+    enabled: !!slug,
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      setTodos(data);
+    },
+  });
   const router = useRouter();
 
   useEffect(
     function establishQueryParams() {
+      console.log("here");
       if (router.asPath === "/") {
         const newSlug = generateSlug(3);
         router.query.slug = newSlug;
@@ -31,22 +42,6 @@ const Home: NextPage = () => {
     },
     [router]
   );
-
-  async function fetchSlugs() {
-    const data = await fetch("/api/slugs");
-    const slugs = await data.json();
-  }
-
-  async function postSlug(slug: string) {
-    const data = await fetch("/api/new-slug", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ slug }),
-    });
-    const slugs = await data.json();
-  }
 
   function handleDone(todo: ToDo) {
     setTodos(
@@ -72,13 +67,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
       </Head>
 
-      <main className="flex flex-col mx-auto h-screen justify-evenly">
+      <main className="flex flex-col mx-auto h-full justify-evenly">
         <div className="flex flex-col items-center w-full">
           <List
             todos={todos}
             handleDone={handleDone}
             deleteTodo={deleteTodo}
-            handleAdd={handleAdd}
             slug={slug}
           />
         </div>
@@ -87,7 +81,5 @@ const Home: NextPage = () => {
     </>
   );
 };
-const NonSSRWrapper = () => <Home />;
-export default dynamic(() => Promise.resolve(NonSSRWrapper), {
-  ssr: false,
-});
+
+export default Home;

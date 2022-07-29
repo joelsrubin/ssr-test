@@ -9,6 +9,16 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
+model ToDo {
+  slugId    Int
+  id        String   @id @default(cuid())
+  text      String
+  completed Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Slug      Slug     @relation(fields: [slugId], references: [id])
+}
+
 model Slug {
   id        Int      @id @default(autoincrement())
   slug      String   @unique
@@ -17,12 +27,3 @@ model Slug {
   ToDo      ToDo[]
 }
 
-model ToDo {
-  id        String   @id @default(cuid())
-  title     String
-  completed Boolean
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  slug      Slug     @relation(fields: [slugId], references: [id])
-  slugId    Int
-}
