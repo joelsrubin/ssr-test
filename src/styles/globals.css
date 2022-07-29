@@ -6,3 +6,7 @@
   font-family: "MonoLisa";
   src: url("../../public/MonoLisa-Regular.otf");
 }
+
+* {
+  font-family: "MonoLisa";
+}

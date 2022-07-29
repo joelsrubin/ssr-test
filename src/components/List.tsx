@@ -1,72 +1,48 @@
 import Image from "next/image";
 import { marked } from "marked";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-import Down from "../../public/down.svg";
-import Up from "../../public/up.svg";
-import MyInput from "./Input";
+import { Input } from "./Input";
 
 export type ToDo = {
   id: number;
   text: string;
   completed: boolean;
-  subTodos: ToDo[];
 };
 
-type TTableProps = {
+type TListProps = {
   children?: React.ReactNode;
   handleDone: (todo: ToDo) => void;
   deleteTodo: (todo: ToDo) => void;
   handleAdd: (todo: ToDo) => void;
+  slug: string | string[] | undefined;
   todos: ToDo[];
 };
 
 function EmptyRow() {
   return (
-    <li className="flex flex-row justify-center">
+    <li className="flex flex-row justify-center bg-gray-200">
       <div className="px-10 py-5 text-center">Add A Todo</div>
       <div className="px-10 py-5 text-center">
-        <span>🫥</span>
+        <span className="text-xl">
+          <h1>🫥</h1>
+        </span>
       </div>
     </li>
   );
 }
 
-export const Table: React.FC<TTableProps> = ({
+export const List: React.FC<TListProps> = ({
   todos,
   handleDone,
   deleteTodo,
   handleAdd,
+  slug,
 }) => {
   const [listRef] = useAutoAnimate<HTMLUListElement>();
-  const [dropDownRef] = useAutoAnimate<HTMLLIElement>();
+
   const lastListElementRef = useRef<HTMLLIElement>(null);
-  const [show, setShow] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<ToDo | null>(null);
-
-  const handleClick = (todo: ToDo) => {
-    setSelectedTodo(todo);
-    setShow(!show);
-  };
-
-  function handleArrows(todo: ToDo) {
-    if (todo.subTodos.length) {
-      if (selectedTodo === todo && show) {
-        return (
-          <Image src={Up} width={20} height={20} alt="up" className="p-4" />
-        );
-      } else if (selectedTodo === todo && !show) {
-        return (
-          <Image src={Down} width={20} height={20} alt="Down" className="p-4" />
-        );
-      } else if (selectedTodo !== todo) {
-        return (
-          <Image src={Down} width={20} height={20} alt="Down" className="p-4" />
-        );
-      }
-    }
-  }
 
   useEffect(() => {
     if (lastListElementRef.current) {
@@ -102,14 +78,6 @@ export const Table: React.FC<TTableProps> = ({
                       __html: marked.parse(todo.text),
                     }}
                   />
-                  <span
-                    className="cursor-pointer p-4"
-                    onClick={() => {
-                      handleClick(todo);
-                    }}
-                  >
-                    {/* {handleArrows(todo)} */}
-                  </span>
                 </div>
                 <div className="p-4 min-h-25 min-w-25 shrink-0">
                   <button
@@ -121,7 +89,7 @@ export const Table: React.FC<TTableProps> = ({
                       alt="delete"
                       height={25}
                       width={25}
-                      className="min-h-25 min-w-25 shrink-0"
+                      className="min-h-25 min-w-25 shrink-0 hover:scale-110 duration-200"
                     />
                   </button>
                 </div>
@@ -130,18 +98,10 @@ export const Table: React.FC<TTableProps> = ({
         ) : (
           <EmptyRow />
         )}
-        <li ref={lastListElementRef}>
-          <MyInput addTodo={handleAdd} />
+        <li ref={lastListElementRef} className="border-t-2 border-slate-200">
+          <Input addTodo={handleAdd} slug={slug} />
         </li>
       </ul>
     </div>
   );
 };
-
-/* {show &&
-                  selectedTodo === todo &&
-                  selectedTodo?.subTodos.map((todo) => (
-                    <li key={todo.id} className=" bg-slate-200 p-4">
-                      {todo.text}
-                    </li>
-                  ))} */

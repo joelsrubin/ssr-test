@@ -1,14 +1,52 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Input from "../components/Input";
-import { Table, ToDo } from "../components/Table";
-import { GlobalStyles } from "../dizzy/GlobalStyles";
-import { Typography } from "../dizzy/Typography";
+
+import { List, ToDo } from "../components/List";
+
 import { useLocalStorage } from "usehooks-ts";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { generateSlug } from "random-word-slugs";
+
+import { Toaster } from "react-hot-toast";
 
 const Home: NextPage = () => {
-  const [todos, setTodos] = useLocalStorage("todos", [] as ToDo[]);
+  const [todos, setTodos] = useLocalStorage<ToDo[]>("todos", []);
+
+  const [slug, setSlug] = useState<undefined | string | string[]>();
+
+  const router = useRouter();
+
+  useEffect(
+    function establishQueryParams() {
+      if (router.asPath === "/") {
+        const newSlug = generateSlug(3);
+        router.query.slug = newSlug;
+        router.push(router);
+        setSlug(newSlug);
+      } else {
+        setSlug(router.query.slug);
+      }
+    },
+    [router]
+  );
+
+  async function fetchSlugs() {
+    const data = await fetch("/api/slugs");
+    const slugs = await data.json();
+  }
+
+  async function postSlug(slug: string) {
+    const data = await fetch("/api/new-slug", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ slug }),
+    });
+    const slugs = await data.json();
+  }
 
   function handleDone(todo: ToDo) {
     setTodos(
@@ -28,7 +66,6 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <GlobalStyles />
       <Head>
         <title>SSR Todos</title>
         <meta name="description" content="my ssr todo app" />
@@ -37,14 +74,16 @@ const Home: NextPage = () => {
 
       <main className="flex flex-col mx-auto h-screen justify-evenly">
         <div className="flex flex-col items-center w-full">
-          <Table
+          <List
             todos={todos}
             handleDone={handleDone}
             deleteTodo={deleteTodo}
             handleAdd={handleAdd}
+            slug={slug}
           />
         </div>
       </main>
+      <Toaster />
     </>
   );
 };

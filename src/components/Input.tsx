@@ -1,15 +1,21 @@
 import React from "react";
-import { Button } from "../dizzy/Button";
-import { Input } from "../dizzy/Input";
 import DOMPurify from "dompurify";
 
-import { ToDo } from "./Table";
+import { ToDo } from "./List";
+import Share from "./Share";
+import toast from "react-hot-toast";
 
-export function MyInput({ addTodo }: { addTodo: (todo: ToDo) => void }) {
+export function Input({
+  addTodo,
+  slug,
+}: {
+  slug: string | string[] | undefined;
+  addTodo: (todo: ToDo) => void;
+}) {
   const [text, setText] = React.useState("");
   return (
     <form
-      className="flex flex-row items-center justify-evenly px-8 py-5 text-lg"
+      className="flex flex-row items-center justify-between px-4 py-5 text-lg"
       onSubmit={(e) => {
         e.preventDefault();
         const sanitized = DOMPurify.sanitize(text);
@@ -18,26 +24,6 @@ export function MyInput({ addTodo }: { addTodo: (todo: ToDo) => void }) {
             id: Math.random(),
             text: sanitized,
             completed: false,
-            subTodos: [
-              {
-                id: Math.random(),
-                text: "Add a sub-todo",
-                completed: false,
-                subTodos: [],
-              },
-              {
-                id: Math.random(),
-                text: "this is sub",
-                completed: false,
-                subTodos: [],
-              },
-              {
-                id: Math.random(),
-                text: "this is another sub",
-                completed: false,
-                subTodos: [],
-              },
-            ],
           });
           setText("");
         }
@@ -51,9 +37,23 @@ export function MyInput({ addTodo }: { addTodo: (todo: ToDo) => void }) {
         onChange={(e) => setText(e.target.value)}
         className="inherit outline-none bg-transparent"
       />
-      <button type="submit">Add</button>
+      <div className="flex flex-row justify-between w-1/6">
+        <button
+          type="submit"
+          className="hover:underline transition-all leading-6 duration-300"
+        >
+          Add
+        </button>
+        <Share
+          clickHandler={async () => {
+            await navigator.clipboard.writeText(String(slug));
+            toast.success(`${slug} has been copied to clipboard!`, {
+              duration: 3500,
+              icon: "👏",
+            });
+          }}
+        />
+      </div>
     </form>
   );
 }
-
-export default MyInput;
