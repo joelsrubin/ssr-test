@@ -8,17 +8,46 @@ import { useRouter } from "next/router";
 import { generateSlug } from "random-word-slugs";
 import ContentEditable from "react-contenteditable";
 import { Toaster } from "react-hot-toast";
-import { useQuery, dehydrate, QueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  dehydrate,
+  QueryClient,
+  useQueryClient,
+  useMutation,
+} from "@tanstack/react-query";
 
 async function getTodos(slug: string | undefined | string[]) {
   const response = await fetch(`/api/posts/${slug}`);
   return await response.json();
 }
+async function deleteTodo(todo: ToDo) {
+  await fetch(`/api/delete-todo/${todo.id}`);
+}
+
+async function updateTodo(todo: ToDo) {
+  await fetch(`/api/update-todo/${todo.id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ completed: todo.completed }),
+  });
+}
 
 const Home: NextPage = () => {
   const [todos, setTodos] = useState<ToDo[]>([]);
   const [slug, setSlug] = useState<undefined | string | string[]>();
-
+  const client = useQueryClient();
+  const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
+    onSuccess: () => {
+      client.invalidateQueries(["todos"]);
+    },
+  });
+  const { mutate: updateTodoAsync } = useMutation(updateTodo, {
+    onSuccess: () => {
+      client.invalidateQueries(["todos"]);
+    },
+  });
   useQuery<ToDo[]>(["todos"], () => getTodos(slug), {
     enabled: !!slug,
     refetchOnWindowFocus: false,
@@ -30,7 +59,6 @@ const Home: NextPage = () => {
 
   useEffect(
     function establishQueryParams() {
-      console.log("here");
       if (router.asPath === "/") {
         const newSlug = generateSlug(3);
         router.query.slug = newSlug;
@@ -42,22 +70,6 @@ const Home: NextPage = () => {
     },
     [router]
   );
-
-  function handleDone(todo: ToDo) {
-    setTodos(
-      todos.map((t) =>
-        t.id === todo.id ? { ...t, completed: !t.completed } : t
-      )
-    );
-  }
-
-  function handleAdd(todo: ToDo) {
-    setTodos([...todos, todo]);
-  }
-
-  function deleteTodo(todo: ToDo) {
-    setTodos(todos.filter((t) => t.id !== todo.id));
-  }
 
   return (
     <>
@@ -71,8 +83,8 @@ const Home: NextPage = () => {
         <div className="flex flex-col items-center w-full">
           <List
             todos={todos}
-            handleDone={handleDone}
-            deleteTodo={deleteTodo}
+            handleDone={updateTodoAsync}
+            deleteTodo={deleteTodoAsync}
             slug={slug}
           />
         </div>

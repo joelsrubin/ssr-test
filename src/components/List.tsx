@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { Input } from "./Input";
 
 export type ToDo = {
-  id: number;
+  id: string;
   text: string;
   completed: boolean;
 };
