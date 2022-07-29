@@ -4,6 +4,6 @@ This is an app bootstrapped according to the [init.tips](https://init.tips) stac
 
 # Todo
 
-[] create functionality to associate todos with a slug
-[] switch localStorage to pull in todos from db
-[]
+[ ] create functionality to associate todos with a slug
+[ ] switch localStorage to pull in todos from db
+[ ]
