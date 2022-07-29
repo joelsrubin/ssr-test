@@ -1174,6 +1174,16 @@
     vite "^3.0.2"
     vite-tsconfig-paths "^3.5.0"
 
+"@liveblocks/client@^0.17.7":
+  version "0.17.7"
+  resolved "https://registry.yarnpkg.com/@liveblocks/client/-/client-0.17.7.tgz#d1aaea02c1e77c93d6db3f9cc3e071d996467fb7"
+  integrity sha512-IcdoaZrOHQM1Hg7vb3CrYFhoXita9iGl14D9crxOGeNvic/3pASF7Yvs5wN684QZDvLPFBYjCvihYK1d0aeX5w==
+
+"@liveblocks/react@^0.17.7":
+  version "0.17.7"
+  resolved "https://registry.yarnpkg.com/@liveblocks/react/-/react-0.17.7.tgz#1a07d427597c1b2b2f6d0b048e51425fcd4a1142"
+  integrity sha512-APMo8VOx9AmCfMQJoGcdBg7Y7oBdpffHNJZj3fiKy1YRjD7pVVmRjwFTUAHN900P5sQkLrcEFf4EKWK8j1NKlw==
+
 "@motionone/animation@^10.12.0":
   version "10.13.1"
   resolved "https://registry.yarnpkg.com/@motionone/animation/-/animation-10.13.1.tgz#ebacb50df4b7eb4957cf398c221ae10852f28520"

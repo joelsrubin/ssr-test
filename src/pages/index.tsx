@@ -10,6 +10,7 @@ import { generateSlug } from "random-word-slugs";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import Share from "../components/Share";
+import { useOthers } from "../../liveblocks.config";
 
 async function getTodos(slug: string | undefined | string[]) {
   const response = await fetch(`/api/get-todos/${slug}`);
@@ -33,6 +34,7 @@ const Home: NextPage = () => {
   const [slug, setSlug] = useState<undefined | string | string[]>();
   const client = useQueryClient();
   const router = useRouter();
+  const others = useOthers();
 
   const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
     onSuccess: () => {

@@ -7,12 +7,18 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useRef } from "react";
+import { RoomProvider } from "../../liveblocks.config";
+import { useRouter } from "next/router";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const queryClient = useRef(new QueryClient());
+  const router = useRouter();
+  const { slug } = router.query;
   return (
     <QueryClientProvider client={queryClient.current}>
-      <Component {...pageProps} />
+      <RoomProvider id={`${slug}`}>
+        <Component {...pageProps} />
+      </RoomProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
