@@ -77,6 +77,7 @@ const Home: NextPage = () => {
       <Head>
         <title>SSR Todos</title>
         <meta name="description" content="my ssr todo app" />
+        <link rel="apple-touch-icon" href="/trash.png" />
         <link rel="icon" href="/trashcan.svg" />
       </Head>
       <div className="sticky top-0 p-4">
