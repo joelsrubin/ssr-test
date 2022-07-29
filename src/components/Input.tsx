@@ -36,7 +36,6 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
   });
 
   const route = useRouter();
-  console.log(route);
 
   return (
     <form
