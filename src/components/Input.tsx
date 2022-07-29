@@ -64,15 +64,6 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
             Add
           </button>
         )}
-        <Share
-          clickHandler={async () => {
-            await navigator.clipboard.writeText(window.location.href);
-            toast.success(`${slug} has been copied to clipboard!`, {
-              duration: 3500,
-              icon: "👏",
-            });
-          }}
-        />
       </div>
     </form>
   );

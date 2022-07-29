@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { generateSlug } from "random-word-slugs";
 import ContentEditable from "react-contenteditable";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import {
   useQuery,
   dehydrate,
@@ -15,6 +15,7 @@ import {
   useQueryClient,
   useMutation,
 } from "@tanstack/react-query";
+import Share from "../components/Share";
 
 async function getTodos(slug: string | undefined | string[]) {
   const response = await fetch(`/api/posts/${slug}`);
@@ -78,7 +79,17 @@ const Home: NextPage = () => {
         <meta name="description" content="my ssr todo app" />
         <link rel="icon" href="/trashcan.svg" />
       </Head>
-
+      <div className="fixed top-0 right-0 p-4">
+        <Share
+          clickHandler={async () => {
+            await navigator.clipboard.writeText(window.location.href);
+            toast.success(`${slug} has been copied to clipboard!`, {
+              duration: 3500,
+              icon: "👏",
+            });
+          }}
+        />
+      </div>
       <main className="flex flex-col mx-auto h-full justify-evenly">
         <div className="flex flex-col items-center w-full">
           <List
