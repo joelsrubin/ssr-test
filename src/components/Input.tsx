@@ -9,7 +9,7 @@ export function MyInput({ addTodo }: { addTodo: (todo: ToDo) => void }) {
   const [text, setText] = React.useState("");
   return (
     <form
-      className="flex flex-row items-center justify-evenly p-8 text-lg"
+      className="flex flex-row items-center justify-evenly px-8 py-5 text-lg"
       onSubmit={(e) => {
         e.preventDefault();
         const sanitized = DOMPurify.sanitize(text);

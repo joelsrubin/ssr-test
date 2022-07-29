@@ -36,15 +36,6 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex flex-col mx-auto h-screen justify-evenly">
-        <Typography
-          as="h1"
-          size="xl"
-          color="blue500"
-          bold
-          className="mx-auto pt-10 z-100"
-        >
-          Todo App
-        </Typography>
         <div className="flex flex-col items-center w-full">
           <Table
             todos={todos}

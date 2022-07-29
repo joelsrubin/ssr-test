@@ -78,9 +78,9 @@ export const Table: React.FC<TTableProps> = ({
   }, [todos]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center">
+    <div className="w-full flex flex-col items-center justify-center h-screen max-h-full py-10">
       <ul
-        className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 max-h-96 overflow-auto shadow-md"
+        className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 overflow-auto shadow-md"
         ref={listRef}
       >
         {todos.length ? (
