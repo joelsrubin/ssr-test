@@ -16,7 +16,7 @@ type TListProps = {
   handleDone: (todo: ToDo) => void;
   deleteTodo: (todo: ToDo) => void;
   slug: string | string[] | undefined;
-  todos: ToDo[];
+  todos: ToDo[] | undefined;
 };
 
 function EmptyRow() {
@@ -57,7 +57,7 @@ export const List: React.FC<TListProps> = ({
         className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 overflow-auto shadow-md"
         ref={listRef}
       >
-        {todos.length ? (
+        {todos?.length ? (
           todos
             .sort((a, b) => +a.completed - +b.completed)
             .map((todo, i) => (

@@ -1,11 +1,8 @@
 import React from "react";
 import DOMPurify from "dompurify";
 
-import Share from "./Share";
-import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TailSpin } from "react-loader-spinner";
-import { useRouter } from "next/router";
 
 export function Input({ slug }: { slug: string | string[] | undefined }) {
   const [text, setText] = React.useState("");
@@ -34,8 +31,6 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
       client.invalidateQueries(["todos"]);
     },
   });
-
-  const route = useRouter();
 
   return (
     <form

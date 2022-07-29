@@ -6,7 +6,7 @@ import { List, ToDo } from "../components/List";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { generateSlug } from "random-word-slugs";
-import ContentEditable from "react-contenteditable";
+
 import toast, { Toaster } from "react-hot-toast";
 import {
   useQuery,
@@ -36,9 +36,10 @@ async function updateTodo(todo: ToDo) {
 }
 
 const Home: NextPage = () => {
-  const [todos, setTodos] = useState<ToDo[]>([]);
   const [slug, setSlug] = useState<undefined | string | string[]>();
   const client = useQueryClient();
+  const router = useRouter();
+
   const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
     onSuccess: () => {
       client.invalidateQueries(["todos"]);
@@ -49,14 +50,11 @@ const Home: NextPage = () => {
       client.invalidateQueries(["todos"]);
     },
   });
-  useQuery<ToDo[]>(["todos"], () => getTodos(slug), {
+
+  const { data } = useQuery<ToDo[]>(["todos"], () => getTodos(slug), {
     enabled: !!slug,
     refetchOnWindowFocus: false,
-    onSuccess: (data) => {
-      setTodos(data);
-    },
   });
-  const router = useRouter();
 
   useEffect(
     function establishQueryParams() {
@@ -94,7 +92,7 @@ const Home: NextPage = () => {
       <main className="flex flex-col mx-auto h-full justify-evenly">
         <div className="flex flex-col items-center w-full">
           <List
-            todos={todos}
+            todos={data}
             handleDone={updateTodoAsync}
             deleteTodo={deleteTodoAsync}
             slug={slug}
