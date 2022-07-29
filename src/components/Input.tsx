@@ -5,6 +5,7 @@ import Share from "./Share";
 import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TailSpin } from "react-loader-spinner";
+import { useRouter } from "next/router";
 
 export function Input({ slug }: { slug: string | string[] | undefined }) {
   const [text, setText] = React.useState("");
@@ -33,6 +34,10 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
       client.invalidateQueries(["todos"]);
     },
   });
+
+  const route = useRouter();
+  console.log(route);
+
   return (
     <form
       className="flex flex-row items-center justify-between px-4 py-5 text-lg"
@@ -61,7 +66,7 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
         )}
         <Share
           clickHandler={async () => {
-            await navigator.clipboard.writeText(String(slug));
+            await navigator.clipboard.writeText(window.location.href);
             toast.success(`${slug} has been copied to clipboard!`, {
               duration: 3500,
               icon: "👏",
