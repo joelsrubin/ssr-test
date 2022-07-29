@@ -79,7 +79,7 @@ const Home: NextPage = () => {
         <meta name="description" content="my ssr todo app" />
         <link rel="icon" href="/trashcan.svg" />
       </Head>
-      <div className="fixed top-0 right-0 p-4">
+      <div className="sticky top-0 p-4">
         <Share
           clickHandler={async () => {
             await navigator.clipboard.writeText(window.location.href);

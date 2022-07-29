@@ -58,7 +58,7 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
         ) : (
           <button
             type="submit"
-            className="hover:underline transition-all leading-6 duration-300"
+            className="hover:underline transition-all leading-6 duration-300 mr-4"
           >
             Add
           </button>
