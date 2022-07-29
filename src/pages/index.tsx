@@ -35,23 +35,23 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center h-screen mx-auto">
+      <main className="flex flex-col mx-auto h-screen justify-evenly">
         <Typography
           as="h1"
           size="xl"
           color="blue500"
           bold
-          className="fixed top-0 mx-auto pt-10 z-100"
+          className="mx-auto pt-10 z-100"
         >
           Todo App
         </Typography>
-        <div className="flex flex-col items-center w-full max-h-1/2">
+        <div className="flex flex-col items-center w-full">
           <Table
             todos={todos}
             handleDone={handleDone}
             deleteTodo={deleteTodo}
+            handleAdd={handleAdd}
           />
-          <Input numTodos={todos.length} addTodo={handleAdd} />
         </div>
       </main>
     </>

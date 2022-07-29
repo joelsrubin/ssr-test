@@ -5,17 +5,11 @@ import DOMPurify from "dompurify";
 
 import { ToDo } from "./Table";
 
-export function MyInput({
-  addTodo,
-  numTodos,
-}: {
-  addTodo: (todo: ToDo) => void;
-  numTodos: number;
-}) {
+export function MyInput({ addTodo }: { addTodo: (todo: ToDo) => void }) {
   const [text, setText] = React.useState("");
   return (
     <form
-      className="flex flex-row items-center justify-evenly gap-4 mt-4 text-lg fixed bottom-0 pb-10 px-6"
+      className="flex flex-row items-center justify-evenly p-8 text-lg"
       onSubmit={(e) => {
         e.preventDefault();
         const sanitized = DOMPurify.sanitize(text);
@@ -49,18 +43,15 @@ export function MyInput({
         }
       }}
     >
-      <Input
+      <input
         type="text"
         name="text"
-        placeholder="Add a todo"
+        placeholder="what should we do?"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        variant="contained"
-        color="neutral"
+        className="inherit outline-none bg-transparent"
       />
-      <Button color="primary" size="md" typeSize="md" type="submit">
-        Add
-      </Button>
+      <button type="submit">Add</button>
     </form>
   );
 }

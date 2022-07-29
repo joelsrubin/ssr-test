@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { marked } from "marked";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Down from "../../public/down.svg";
 import Up from "../../public/up.svg";
+import MyInput from "./Input";
 
 export type ToDo = {
   id: number;
@@ -17,6 +18,7 @@ type TTableProps = {
   children?: React.ReactNode;
   handleDone: (todo: ToDo) => void;
   deleteTodo: (todo: ToDo) => void;
+  handleAdd: (todo: ToDo) => void;
   todos: ToDo[];
 };
 
@@ -35,9 +37,11 @@ export const Table: React.FC<TTableProps> = ({
   todos,
   handleDone,
   deleteTodo,
+  handleAdd,
 }) => {
   const [listRef] = useAutoAnimate<HTMLUListElement>();
   const [dropDownRef] = useAutoAnimate<HTMLLIElement>();
+  const lastListElementRef = useRef<HTMLLIElement>(null);
   const [show, setShow] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<ToDo | null>(null);
 
@@ -64,20 +68,28 @@ export const Table: React.FC<TTableProps> = ({
     }
   }
 
+  useEffect(() => {
+    if (lastListElementRef.current) {
+      lastListElementRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [todos]);
+
   return (
-    <div className="w-full flex flex-col items-center justify-center h-screen">
+    <div className="w-full flex flex-col items-center justify-center">
       <ul
-        className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 max-h-96 sm:max-h-96 overflow-auto shadow-md"
+        className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 max-h-96 overflow-auto shadow-md"
         ref={listRef}
       >
         {todos.length ? (
           todos
             .sort((a, b) => +a.completed - +b.completed)
-            .map((todo) => (
+            .map((todo, i) => (
               <li
                 key={todo.id}
                 className="flex flex-row w-full justify-between odd:bg-gray-200"
-                ref={dropDownRef}
               >
                 <div className="flex flex-row">
                   <div
@@ -118,6 +130,9 @@ export const Table: React.FC<TTableProps> = ({
         ) : (
           <EmptyRow />
         )}
+        <li ref={lastListElementRef}>
+          <MyInput addTodo={handleAdd} />
+        </li>
       </ul>
     </div>
   );
