@@ -12,8 +12,8 @@ import { useRouter } from "next/router";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const queryClient = useRef(new QueryClient());
-  const router = useRouter();
-  const { slug } = router.query;
+  const { query: slug } = useRouter();
+
   return (
     <QueryClientProvider client={queryClient.current}>
       <RoomProvider id={`${slug}`}>
