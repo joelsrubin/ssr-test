@@ -39,7 +39,7 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
 
   return (
     <form
-      className="flex flex-row items-center justify-between px-4 py-5 text-lg"
+      className="flex flex-row items-center justify-around px-5 py-5"
       onSubmit={mutate}
     >
       <input
@@ -50,20 +50,19 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
         onChange={(e) => setText(e.target.value)}
         className="inherit outline-none bg-transparent"
       />
-      <div className="flex flex-row justify-between w-1/6">
-        {isLoading ? (
-          <div>
-            <TailSpin height="20" width="20" color="gray" />
-          </div>
-        ) : (
-          <button
-            type="submit"
-            className="hover:underline transition-all leading-6 duration-300 mr-4"
-          >
-            Add
-          </button>
-        )}
-      </div>
+
+      {isLoading ? (
+        <div>
+          <TailSpin height="20" width="20" color="gray" />
+        </div>
+      ) : (
+        <button
+          type="submit"
+          className="hover:underline transition-all duration-300"
+        >
+          Add
+        </button>
+      )}
     </form>
   );
 }
