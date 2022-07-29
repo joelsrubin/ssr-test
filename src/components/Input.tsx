@@ -12,7 +12,7 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
     e.preventDefault();
     const sanitized = DOMPurify.sanitize(text);
     if (sanitized.length > 0) {
-      await fetch("/api/add-posts-to-slug", {
+      await fetch("/api/add-todos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

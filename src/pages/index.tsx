@@ -8,17 +8,11 @@ import { useRouter } from "next/router";
 import { generateSlug } from "random-word-slugs";
 
 import toast, { Toaster } from "react-hot-toast";
-import {
-  useQuery,
-  dehydrate,
-  QueryClient,
-  useQueryClient,
-  useMutation,
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import Share from "../components/Share";
 
 async function getTodos(slug: string | undefined | string[]) {
-  const response = await fetch(`/api/posts/${slug}`);
+  const response = await fetch(`/api/get-todos/${slug}`);
   return await response.json();
 }
 async function deleteTodo(todo: ToDo) {

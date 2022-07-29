@@ -12,7 +12,6 @@ export type ToDo = {
 };
 
 type TListProps = {
-  children?: React.ReactNode;
   handleDone: (todo: ToDo) => void;
   deleteTodo: (todo: ToDo) => void;
   slug: string | string[] | undefined;
