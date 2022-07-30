@@ -10,7 +10,8 @@ import { generateSlug } from "random-word-slugs";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import Share from "../components/Share";
-import { useOthers } from "../../liveblocks.config";
+import { useOthers, useUpdateMyPresence } from "../../liveblocks.config";
+import Cursor from "../components/Cursor";
 
 async function getTodos(slug: string | undefined | string[]) {
   const response = await fetch(`/api/get-todos/${slug}`);
@@ -35,6 +36,7 @@ const Home: NextPage = () => {
   const client = useQueryClient();
   const router = useRouter();
   const others = useOthers();
+  const updateMyPresence = useUpdateMyPresence();
 
   const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
     onSuccess: () => {
@@ -65,7 +67,20 @@ const Home: NextPage = () => {
     },
     [router]
   );
-
+  const COLORS = [
+    "#E57373",
+    "#9575CD",
+    "#4FC3F7",
+    "#81C784",
+    "#FFF176",
+    "#FF8A65",
+    "#F06292",
+    "#7986CB",
+  ];
+  const othersCursors = others.map((user) => user.presence?.cursor);
+  const color = useRef(
+    COLORS[Math.round(Math.random() * COLORS.length - 1) || "#000"]
+  );
   return (
     <>
       <Head>
@@ -74,27 +89,46 @@ const Home: NextPage = () => {
         <link rel="apple-touch-icon" href="/airplane.png" />
         <link rel="icon" href="/trashcan.svg" />
       </Head>
-      <div className="sticky top-0 p-4">
-        <Share
-          clickHandler={async () => {
-            await navigator.clipboard.writeText(window.location.href);
-            toast.success(`${slug} has been copied to clipboard!`, {
-              duration: 3500,
-              icon: "👏",
-            });
-          }}
-        />
-      </div>
-      <main className="flex flex-col mx-auto h-full justify-evenly">
-        <div className="flex flex-col items-center w-full">
-          <List
-            todos={data}
-            handleDone={updateTodoAsync}
-            deleteTodo={deleteTodoAsync}
-            slug={slug}
+
+      <div
+        style={{ width: "100vw", height: "100vh" }}
+        onPointerMove={(e) => {
+          updateMyPresence({
+            cursor: {
+              x: e.clientX,
+              y: e.clientY,
+            },
+          });
+        }}
+      >
+        <div className="sticky top-0 p-4">
+          {othersCursors.map((cursor) => {
+            return cursor ? (
+              <Cursor x={cursor.x} y={cursor.y} color={color.current} />
+            ) : null;
+          })}
+
+          <Share
+            clickHandler={async () => {
+              await navigator.clipboard.writeText(window.location.href);
+              toast.success(`${slug} has been copied to clipboard!`, {
+                duration: 3500,
+                icon: "👏",
+              });
+            }}
           />
         </div>
-      </main>
+        <main className="flex flex-col mx-auto h-full justify-evenly">
+          <div className="flex flex-col items-center w-full">
+            <List
+              todos={data}
+              handleDone={updateTodoAsync}
+              deleteTodo={deleteTodoAsync}
+              slug={slug}
+            />
+          </div>
+        </main>
+      </div>
       <Toaster />
     </>
   );
