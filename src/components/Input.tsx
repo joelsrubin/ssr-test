@@ -3,8 +3,17 @@ import DOMPurify from "dompurify";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TailSpin } from "react-loader-spinner";
+import type { TListItem } from "../pages";
 
-export function Input({ slug }: { slug: string | string[] | undefined }) {
+export function Input({
+  slug,
+  setList,
+  list,
+}: {
+  slug: string | undefined;
+  setList: (list: TListItem[]) => void;
+  list: TListItem[];
+}) {
   const [text, setText] = React.useState("");
 
   const client = useQueryClient();
@@ -28,6 +37,12 @@ export function Input({ slug }: { slug: string | string[] | undefined }) {
   const { mutate, isLoading } = useMutation(handleSubmit, {
     onSuccess: () => {
       setText("");
+
+      const listContainsSlug = list.some((item) => item.slug === slug);
+      if ((!list.length && slug) || (!listContainsSlug && slug)) {
+        setList([...list, { slug, href: window.location.href }]);
+      }
+
       client.invalidateQueries(["todos"]);
     },
   });

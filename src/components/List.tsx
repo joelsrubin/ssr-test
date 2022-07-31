@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 
 import { Input } from "./Input";
 
+import type { TListItem } from "../pages";
+
 export type ToDo = {
   id: string;
   text: string;
@@ -14,7 +16,9 @@ export type ToDo = {
 type TListProps = {
   handleDone: (todo: ToDo) => void;
   deleteTodo: (todo: ToDo) => void;
-  slug: string | string[] | undefined;
+  slug: string | undefined;
+  setList: (list: TListItem[]) => void;
+  list: TListItem[];
   todos: ToDo[] | undefined;
 };
 
@@ -36,6 +40,8 @@ export const List: React.FC<TListProps> = ({
   handleDone,
   deleteTodo,
   slug,
+  setList,
+  list,
 }) => {
   const [listRef] = useAutoAnimate<HTMLUListElement>();
 
@@ -96,7 +102,7 @@ export const List: React.FC<TListProps> = ({
           <EmptyRow />
         )}
         <li ref={lastListElementRef} className="border-t-2 border-slate-200">
-          <Input slug={slug} />
+          <Input slug={slug} setList={setList} list={list} />
         </li>
       </ul>
     </div>
