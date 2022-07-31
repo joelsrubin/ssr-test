@@ -96,12 +96,8 @@ const Home: NextPage = () => {
             img="/database.svg"
             alt="saved lists"
             clickHandler={() => {
-              toast.custom((t) => (
-                <div
-                  className={`${
-                    t.visible ? "animate-fade-in-down" : "animate-fade-out-up"
-                  } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-col ring-1 ring-black ring-opacity-5`}
-                >
+              toast((t) => (
+                <div className={`flex flex-col`}>
                   <p className="text-sm font-lg text-gray-900 text-center p-4">
                     Recent Lists
                   </p>
@@ -117,7 +113,7 @@ const Home: NextPage = () => {
                         </a>
                       ))}
                   </ul>
-                  <div className="flex border-l border-gray-200">
+                  <div className="flex">
                     <button
                       onClick={() => toast.dismiss(t.id)}
                       className="w-full border border-transparent rounded-sm p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
