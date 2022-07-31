@@ -101,7 +101,7 @@ export const List: React.FC<TListProps> = ({
         ) : (
           <EmptyRow />
         )}
-        <li ref={lastListElementRef} className="border-t-2 border-slate-200">
+        <li ref={lastListElementRef}>
           <Input slug={slug} setList={setList} list={list} />
         </li>
       </ul>

@@ -48,31 +48,27 @@ export function Input({
   });
 
   return (
-    <form
-      className="flex flex-row items-center justify-around px-5 py-5"
-      onSubmit={mutate}
-    >
-      <input
-        type="text"
-        name="text"
-        placeholder="what should we do?"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        className="inherit outline-none bg-transparent"
-      />
+    <form onSubmit={mutate}>
+      <div className="flex flex-row justify-between">
+        <input
+          type="text"
+          name="text"
+          placeholder="what todo?"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="inherit outline-none bg-transparent p-4 w-1/2"
+        />
 
-      {isLoading ? (
-        <div>
-          <TailSpin height="20" width="20" color="gray" />
-        </div>
-      ) : (
-        <button
-          type="submit"
-          className="hover:underline transition-all duration-300"
-        >
-          Add
-        </button>
-      )}
+        {isLoading ? (
+          <div>
+            <TailSpin height="20" width="20" color="gray" />
+          </div>
+        ) : (
+          <button type="submit" className="hover:underline p-4 shrink-0">
+            Add
+          </button>
+        )}
+      </div>
     </form>
   );
 }
