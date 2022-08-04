@@ -4,6 +4,7 @@ import DOMPurify from "dompurify";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TailSpin } from "react-loader-spinner";
 import type { TListItem } from "../pages";
+import { ToDo } from "./List";
 
 export function Input({
   slug,
@@ -15,6 +16,7 @@ export function Input({
   list: TListItem[];
 }) {
   const [text, setText] = React.useState("");
+  const { data: todos, refetch } = useQuery<ToDo[]>(["todos"]);
 
   const client = useQueryClient();
   const handleSubmit = async (e) => {
@@ -30,6 +32,7 @@ export function Input({
           slug,
           text: sanitized,
           completed: false,
+          priority: todos?.length || 0,
         }),
       });
     }
@@ -37,13 +40,13 @@ export function Input({
   const { mutate, isLoading } = useMutation(handleSubmit, {
     onSuccess: () => {
       setText("");
-
+      // operation to consider adding the slug to the list
       const listContainsSlug = list.some((item) => item.slug === slug);
       if ((!list.length && slug) || (!listContainsSlug && slug)) {
         setList([...list, { slug, href: window.location.href }]);
       }
 
-      client.invalidateQueries(["todos"]);
+      refetch();
     },
   });
 

@@ -2,14 +2,14 @@ import prisma from "../../../../lib";
 
 export default async function handle(req, res) {
   const { id } = req.query;
-  const { completed } = req.body;
+  const { priority } = req.body;
 
-  await prisma.toDo.update({
+  await prisma.toDo.updateMany({
     where: {
       id,
     },
     data: {
-      completed,
+      priority,
     },
   });
 

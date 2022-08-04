@@ -10,3 +10,12 @@
 * {
   font-family: "MonoLisa";
 }
+
+a {
+  text-decoration: underline;
+  color: rgb(122, 122, 237);
+}
+
+a:visited {
+  color: slategrey;
+}
