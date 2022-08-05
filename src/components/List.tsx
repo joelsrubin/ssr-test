@@ -71,9 +71,7 @@ export const List: React.FC<TListProps> = ({
       },
       body: JSON.stringify(idsWithPriority),
     });
-
-    // await client.invalidateQueries(["todos"]);
-  }, [sortableList, client]);
+  }, [sortableList]);
 
   useEffect(() => {
     if (lastListElementRef.current) {
