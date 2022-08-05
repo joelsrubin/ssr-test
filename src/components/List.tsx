@@ -52,7 +52,22 @@ export const List: React.FC<TListProps> = ({
 }) => {
   const client = useQueryClient();
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
-
+  const { mutate } = useMutation(
+    async (data: { id: string; priority: number }[]) => {
+      await fetch("/api/update-todo-priority", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    },
+    {
+      onSuccess: () => {
+        client.invalidateQueries(["todos"]);
+      },
+    }
+  );
   useEffect(() => {
     todos &&
       todos.length &&
@@ -66,14 +81,8 @@ export const List: React.FC<TListProps> = ({
       return { id: todo.id, priority: i, text: todo.text };
     });
 
-    await fetch("/api/update-todo-priority", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(idsWithPriority),
-    });
-  }, [sortableList]);
+    mutate(idsWithPriority);
+  }, [sortableList, mutate]);
 
   useEffect(() => {
     if (lastListElementRef.current) {
