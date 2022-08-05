@@ -68,17 +68,17 @@ export const List: React.FC<TListProps> = ({
   const client = useQueryClient();
   const controls = useDragControls();
   const [listRef] = useAutoAnimate<HTMLUListElement>();
-  const [todosWithPriority, setTodosWithPriority] = useState(
-    todos?.map(({ id, priority }) => {
-      return { id, priority };
-    })
-  );
+  // const [todosWithPriority, setTodosWithPriority] = useState(
+  //   todos?.map(({ id, priority }) => {
+  //     return { id, priority };
+  //   })
+  // );
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
   useEffect(() => {
     todos && setSortableList(todos);
   }, [todos]);
   const { mutate: updatePriorityAsync } = useMutation(
-    async (data: typeof todosWithPriority[]) => {
+    async (data) => {
       await fetch("/api/update-todo-priority", {
         method: "POST",
         headers: {
@@ -94,15 +94,6 @@ export const List: React.FC<TListProps> = ({
     }
   );
 
-  async function updatePriority(x: number, y: number) {
-    if (todosWithPriority) {
-      console.log(todosWithPriority);
-      const nextData = handleSwappingPriorities(todosWithPriority, x, y);
-      console.log(nextData);
-      // await updatePriorityAsync(nextData);
-    }
-  }
-  console.log({ sortableList });
   const lastListElementRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -123,59 +114,48 @@ export const List: React.FC<TListProps> = ({
           onReorder={setSortableList}
         >
           {sortableList?.length ? (
-            sortableList
-              .sort((a, b) => +a.completed - +b.completed)
-              .map((todo, i) => (
-                <Reorder.Item
-                  key={todo.id}
-                  value={todo}
-                  dragControls={controls}
-                  as="div"
-                >
-                  <li className="flex flex-row w-full justify-between border-y-2 border-gray-200 focus-within:bg-gray-200">
-                    <div className="flex flex-row">
-                      <div className="flex justify-center items-center cursor-pointer pl-2">
-                        <IconGripVertical
-                          size={25}
-                          stroke={"gray"}
-                          onPointerDown={(e) => controls.start(e)}
-                        />
-                      </div>
-                      <div
-                        className={`cursor-pointer p-4 pt-5 ${
-                          todo.completed &&
-                          "line-through decoration-4 text-gray-500"
-                        } transition-colors`}
-                        onClick={() =>
-                          handleDone({ ...todo, completed: !todo.completed })
-                        }
-                        dangerouslySetInnerHTML={{
-                          __html: marked.parse(todo.text),
-                        }}
+            sortableList.map((todo, i) => (
+              <Reorder.Item key={todo.id} value={todo} as="div">
+                <li className="flex flex-row w-full justify-between border-y-2 border-gray-200 focus-within:bg-gray-200">
+                  <div className="flex flex-row">
+                    <div className="flex justify-center items-center cursor-pointer pl-2">
+                      <IconGripVertical size={25} stroke={"gray"} />
+                    </div>
+                    <div
+                      className={`cursor-pointer p-4 pt-5 ${
+                        todo.completed &&
+                        "line-through decoration-4 text-gray-500"
+                      } transition-colors`}
+                      onClick={() =>
+                        handleDone({ ...todo, completed: !todo.completed })
+                      }
+                      dangerouslySetInnerHTML={{
+                        __html: marked.parse(todo.text),
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-row p-4 min-h-25 min-w-25 shrink-0">
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => deleteTodo(todo)}
+                    >
+                      <Image
+                        src="/trashcan.svg"
+                        alt="delete"
+                        height={25}
+                        width={25}
+                        className="min-h-25 min-w-25 shrink-0 hover:scale-110 duration-200"
                       />
-                    </div>
-                    <div className="flex flex-row p-4 min-h-25 min-w-25 shrink-0">
-                      <button
-                        className="cursor-pointer"
-                        onClick={() => deleteTodo(todo)}
-                      >
-                        <Image
-                          src="/trashcan.svg"
-                          alt="delete"
-                          height={25}
-                          width={25}
-                          className="min-h-25 min-w-25 shrink-0 hover:scale-110 duration-200"
-                        />
-                      </button>
-                    </div>
-                  </li>
-                </Reorder.Item>
-              ))
+                    </button>
+                  </div>
+                </li>
+              </Reorder.Item>
+            ))
           ) : (
             <EmptyRow />
           )}
           <li ref={lastListElementRef}>
-            <Input slug={slug} setList={setList} list={list} />
+            <Input slug={slug} setList={setList} list={list} todos={todos} />
           </li>
         </Reorder.Group>
       </ul>

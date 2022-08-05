@@ -10,14 +10,14 @@ export function Input({
   slug,
   setList,
   list,
+  todos,
 }: {
   slug: string | undefined;
   setList: (list: TListItem[]) => void;
   list: TListItem[];
+  todos: ToDo[] | undefined;
 }) {
   const [text, setText] = React.useState("");
-  const { data: todos, refetch } = useQuery<ToDo[]>(["todos"]);
-
   const client = useQueryClient();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +46,7 @@ export function Input({
         setList([...list, { slug, href: window.location.href }]);
       }
 
-      refetch();
+      client.invalidateQueries(["todos"]);
     },
   });
 
