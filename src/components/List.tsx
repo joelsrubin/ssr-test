@@ -1,14 +1,10 @@
 import Image from "next/image";
 import { marked } from "marked";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  IconArrowNarrowUp,
-  IconArrowNarrowDown,
-  IconGripVertical,
-} from "@tabler/icons";
+import { IconGripVertical } from "@tabler/icons";
 import { Input } from "./Input";
-import { Reorder, useDragControls } from "framer-motion";
+import { Reorder } from "framer-motion";
 
 import type { TListItem } from "../pages";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -52,6 +48,7 @@ export const List: React.FC<TListProps> = ({
 }) => {
   const client = useQueryClient();
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
   const { mutate } = useMutation(
     async (data: { id: string; priority: number }[]) => {
       await fetch("/api/update-todo-priority", {
@@ -75,13 +72,16 @@ export const List: React.FC<TListProps> = ({
   }, [todos]);
 
   const lastListElementRef = useRef<HTMLLIElement>(null);
+  const dragNode = useRef<ToDo | null>(null);
 
   const updatePriority = useCallback(async () => {
+    dragNode.current = null;
     const idsWithPriority = sortableList.map((todo, i) => {
       return { id: todo.id, priority: i, text: todo.text };
     });
 
     mutate(idsWithPriority);
+    setIsDragging(false);
   }, [sortableList, mutate]);
 
   useEffect(() => {
@@ -107,11 +107,25 @@ export const List: React.FC<TListProps> = ({
                 key={todo.id}
                 value={todo}
                 as="div"
+                onDragStart={() => {
+                  setIsDragging(true);
+                  dragNode.current = todo;
+                }}
                 onDragEnd={updatePriority}
               >
-                <li className="flex flex-row w-full justify-between border-y-2 border-gray-200 focus:bg-gray-200">
+                <li
+                  className={`flex flex-row w-full justify-between border-y-2 border-gray-200 focus:bg-gray-200 ${
+                    isDragging ? "cursor-grabbing" : "cursor-grab"
+                  } ${
+                    dragNode.current === todo && "bg-gray-200 opacity-50 z-10"
+                  } `}
+                >
                   <div className="flex flex-row">
-                    <div className="flex justify-center items-center cursor-pointer pl-2">
+                    <div
+                      className={`flex justify-center items-center ${
+                        isDragging ? "cursor-grabbing" : "cursor-grab"
+                      } cursor-pointer pl-2`}
+                    >
                       <IconGripVertical size={25} stroke={"gray"} />
                     </div>
                     <div
