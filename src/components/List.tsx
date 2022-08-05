@@ -27,7 +27,7 @@ type TListProps = {
 
 function EmptyRow() {
   return (
-    <li className="flex flex-row justify-center bg-gray-200">
+    <li className="flex flex-row justify-center">
       <div className="px-10 py-5 text-center">Add A Todo</div>
       <div className="px-10 py-5 text-center">
         <span className="text-xl">
@@ -65,11 +65,15 @@ export const List: React.FC<TListProps> = ({
       },
     }
   );
-  useEffect(() => {
-    todos && todos.length
-      ? setSortableList(todos.sort((a, b) => a.priority - b.priority))
-      : setSortableList([]);
-  }, [todos]);
+
+  useEffect(
+    function updateTodosFromDBAndSort() {
+      todos && todos.length
+        ? setSortableList(todos.sort((a, b) => a.priority - b.priority))
+        : setSortableList([]);
+    },
+    [todos]
+  );
 
   const lastListElementRef = useRef<HTMLLIElement>(null);
   const dragNode = useRef<ToDo | null>(null);
@@ -91,7 +95,7 @@ export const List: React.FC<TListProps> = ({
         block: "nearest",
       });
     }
-  }, [todos]);
+  }, [sortableList]);
 
   return (
     <div className="w-full flex flex-col items-center justify-center h-screen max-h-50 py-10 select-none">
@@ -114,7 +118,7 @@ export const List: React.FC<TListProps> = ({
                 onDragEnd={updatePriority}
               >
                 <li
-                  className={`flex flex-row w-full justify-between border-y-2 border-gray-200 focus:bg-gray-200 ${
+                  className={`flex flex-row w-full justify-between border-y-2 border-gray-200 ${
                     isDragging ? "cursor-grabbing" : "cursor-grab"
                   } ${
                     dragNode.current === todo && "bg-gray-200 opacity-50 z-10"

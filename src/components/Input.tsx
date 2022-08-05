@@ -52,7 +52,7 @@ export function Input({
 
   return (
     <form onSubmit={mutate}>
-      <div className="flex flex-row justify-between border-t-2 border-gray-200">
+      <div className="flex flex-row justify-between border-t-2 border-gray-200 bg-gray-200">
         <input
           type="text"
           name="text"
