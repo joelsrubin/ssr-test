@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { marked } from "marked";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   IconArrowNarrowUp,
   IconArrowNarrowDown,
@@ -12,21 +12,6 @@ import { Reorder, useDragControls } from "framer-motion";
 
 import type { TListItem } from "../pages";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-function handleSwappingPriorities(
-  data: any,
-  curRank: number,
-  nextRank: number
-) {
-  const nextData = [...data];
-  const whatsAtCur = nextData?.find(({ priority }) => priority === curRank);
-  const whatsAtNext = nextData?.find(({ priority }) => priority === nextRank);
-  if (whatsAtNext && whatsAtCur) {
-    whatsAtNext.priority = curRank;
-    whatsAtCur.priority = nextRank;
-  }
-  return nextData;
-}
 
 export type ToDo = {
   id: string;
@@ -66,35 +51,29 @@ export const List: React.FC<TListProps> = ({
   list,
 }) => {
   const client = useQueryClient();
-  const controls = useDragControls();
-  const [listRef] = useAutoAnimate<HTMLUListElement>();
-  // const [todosWithPriority, setTodosWithPriority] = useState(
-  //   todos?.map(({ id, priority }) => {
-  //     return { id, priority };
-  //   })
-  // );
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
+
   useEffect(() => {
-    todos && setSortableList(todos);
+    todos && setSortableList(todos.sort((a, b) => a.priority - b.priority));
   }, [todos]);
-  const { mutate: updatePriorityAsync } = useMutation(
-    async (data) => {
-      await fetch("/api/update-todo-priority", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-    },
-    {
-      onSuccess: () => {
-        client.invalidateQueries(["todos"]);
-      },
-    }
-  );
 
   const lastListElementRef = useRef<HTMLLIElement>(null);
+
+  const updatePriority = useCallback(async () => {
+    const idsWithPriority = sortableList.map((todo, i) => {
+      return { id: todo.id, priority: i, text: todo.text };
+    });
+
+    await fetch("/api/update-todo-priority", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(idsWithPriority),
+    });
+
+    // await client.invalidateQueries(["todos"]);
+  }, [sortableList, client]);
 
   useEffect(() => {
     if (lastListElementRef.current) {
@@ -107,7 +86,7 @@ export const List: React.FC<TListProps> = ({
 
   return (
     <div className="w-full flex flex-col items-center justify-center h-screen max-h-50 py-10 select-none">
-      <ul className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 overflow-auto shadow-md">
+      <ul className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 overflow-auto shadow-md gap-2">
         <Reorder.Group
           axis="y"
           values={sortableList}
@@ -115,8 +94,13 @@ export const List: React.FC<TListProps> = ({
         >
           {sortableList?.length ? (
             sortableList.map((todo, i) => (
-              <Reorder.Item key={todo.id} value={todo} as="div">
-                <li className="flex flex-row w-full justify-between border-y-2 border-gray-200 focus-within:bg-gray-200">
+              <Reorder.Item
+                key={todo.id}
+                value={todo}
+                as="div"
+                onDragEnd={updatePriority}
+              >
+                <li className="flex flex-row w-full justify-between border-y-2 border-gray-200 focus:bg-gray-200">
                   <div className="flex flex-row">
                     <div className="flex justify-center items-center cursor-pointer pl-2">
                       <IconGripVertical size={25} stroke={"gray"} />
