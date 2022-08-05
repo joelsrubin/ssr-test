@@ -115,6 +115,10 @@ export const List: React.FC<TListProps> = ({
                   setIsDragging(true);
                   dragNode.current = todo;
                 }}
+                onTouchStart={() => {
+                  setIsDragging(true);
+                  dragNode.current = todo;
+                }}
                 onDragEnd={updatePriority}
               >
                 <li
