@@ -54,7 +54,9 @@ export const List: React.FC<TListProps> = ({
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
 
   useEffect(() => {
-    todos && setSortableList(todos.sort((a, b) => a.priority - b.priority));
+    todos &&
+      todos.length &&
+      setSortableList(todos.sort((a, b) => a.priority - b.priority));
   }, [todos]);
 
   const lastListElementRef = useRef<HTMLLIElement>(null);
