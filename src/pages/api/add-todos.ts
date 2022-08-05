@@ -1,7 +1,8 @@
 import prisma from "../../../lib";
 
 export default async function handle(req, res) {
-  const { slug, text, completed } = req.body;
+  const { slug, text, completed, priority } = req.body;
+  console.log("priority", priority);
   const slugExists = await prisma.slug.findFirst({
     where: { slug },
   });
@@ -10,6 +11,7 @@ export default async function handle(req, res) {
       data: {
         text,
         completed,
+        priority,
         Slug: {
           create: {
             slug,
@@ -23,6 +25,7 @@ export default async function handle(req, res) {
       data: {
         text,
         completed,
+        priority,
         Slug: {
           connect: {
             slug,

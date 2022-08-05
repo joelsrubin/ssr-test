@@ -20,13 +20,13 @@ async function deleteTodo(todo: ToDo) {
   await fetch(`/api/delete-todo/${todo.id}`);
 }
 
-async function updateTodo(todo: ToDo) {
-  await fetch(`/api/update-todo/${todo.id}`, {
+async function updateTodo({ id, text, completed }: ToDo) {
+  await fetch(`/api/update-todo/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ completed: todo.completed }),
+    body: JSON.stringify({ completed }),
   });
 }
 

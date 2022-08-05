@@ -4,18 +4,20 @@ import DOMPurify from "dompurify";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TailSpin } from "react-loader-spinner";
 import type { TListItem } from "../pages";
+import { ToDo } from "./List";
 
 export function Input({
   slug,
   setList,
   list,
+  todos,
 }: {
   slug: string | undefined;
   setList: (list: TListItem[]) => void;
   list: TListItem[];
+  todos: ToDo[] | undefined;
 }) {
   const [text, setText] = React.useState("");
-
   const client = useQueryClient();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ export function Input({
           slug,
           text: sanitized,
           completed: false,
+          priority: todos?.length || 0,
         }),
       });
     }
@@ -37,7 +40,7 @@ export function Input({
   const { mutate, isLoading } = useMutation(handleSubmit, {
     onSuccess: () => {
       setText("");
-
+      // operation to consider adding the slug to the list
       const listContainsSlug = list.some((item) => item.slug === slug);
       if ((!list.length && slug) || (!listContainsSlug && slug)) {
         setList([...list, { slug, href: window.location.href }]);
