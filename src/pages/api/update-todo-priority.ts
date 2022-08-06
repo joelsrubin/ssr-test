@@ -1,7 +1,7 @@
 import prisma from "../../../lib";
 
 export default async function handle(req, res) {
-  const data = req.body;
+  const { data, slug } = req.body;
 
   const funcs = data.map(({ id, priority }) => {
     return prisma.toDo.update({
@@ -15,5 +15,13 @@ export default async function handle(req, res) {
   });
 
   await prisma.$transaction(funcs);
-  res.json(`Todos updated!`);
+  const updatedList = await prisma.toDo.findMany({
+    where: {
+      Slug: {
+        slug,
+      },
+    },
+  });
+
+  res.json(updatedList);
 }

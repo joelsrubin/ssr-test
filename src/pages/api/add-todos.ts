@@ -2,7 +2,7 @@ import prisma from "../../../lib";
 
 export default async function handle(req, res) {
   const { slug, text, completed, priority } = req.body;
-  console.log("priority", priority);
+
   const slugExists = await prisma.slug.findFirst({
     where: { slug },
   });
@@ -19,7 +19,16 @@ export default async function handle(req, res) {
         },
       },
     });
-    return res.status(200).json({ message: "Todo added to new slug: " + slug });
+
+    const updatedList = await prisma.toDo.findMany({
+      where: {
+        Slug: {
+          slug,
+        },
+      },
+    });
+
+    return res.json(updatedList);
   } else {
     await prisma.toDo.create({
       data: {
@@ -34,6 +43,14 @@ export default async function handle(req, res) {
       },
     });
 
-    res.status(200).json({ message: "Todo added" });
+    const updatedList = await prisma.toDo.findMany({
+      where: {
+        Slug: {
+          slug,
+        },
+      },
+    });
+
+    return res.json(updatedList);
   }
 }

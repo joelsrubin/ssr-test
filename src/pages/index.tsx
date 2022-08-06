@@ -17,17 +17,19 @@ async function getTodos(slug: string | undefined | string[]) {
   return await response.json();
 }
 async function deleteTodo(todo: ToDo) {
-  await fetch(`/api/delete-todo/${todo.id}`);
+  const updatedTodos = await fetch(`/api/delete-todo/${todo.id}`);
+  return await updatedTodos.json();
 }
 
-async function updateTodo({ id, text, completed }: ToDo) {
-  await fetch(`/api/update-todo/${id}`, {
+async function updateTodo({ id, completed }: ToDo) {
+  const updated = await fetch(`/api/update-todo/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ completed }),
   });
+  return await updated.json();
 }
 
 export type TListItem = {
@@ -38,15 +40,44 @@ export type TListItem = {
 const Home: NextPage = () => {
   const [slug, setSlug] = useState<undefined | string>();
   const [list, setList] = useLocalStorage<TListItem[]>("slugList", []);
+
   const client = useQueryClient();
   const router = useRouter();
 
-  const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
-    onSuccess: () => {
-      client.invalidateQueries(["todos"]);
+  const { mutate: updatePrioritiesAsync } = useMutation(
+    async (data: { id: string; priority: number }[]) => {
+      const nextInfo = await fetch("/api/update-todo-priority", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data, slug }),
+      });
+      return await nextInfo.json();
     },
-  });
+    {
+      onSuccess: (updatedTodos) => {
+        client.setQueryData(["todos"], updatedTodos);
+      },
+    }
+  );
+
   const { mutate: updateTodoAsync } = useMutation(updateTodo, {
+    onMutate: (data) => {
+      client.cancelQueries(["todos"]);
+      const updatedTodos: ToDo[] | undefined = client.getQueryData(["todos"]);
+      if (updatedTodos) {
+        let listWithoutUpdated = [...updatedTodos].filter((todo) => {
+          return todo.id !== data.id;
+        });
+        listWithoutUpdated.push({
+          ...data,
+          completed: data.completed,
+        });
+
+        client.setQueryData(["todos"], listWithoutUpdated);
+      }
+    },
     onSuccess: () => {
       client.invalidateQueries(["todos"]);
     },
@@ -55,6 +86,19 @@ const Home: NextPage = () => {
   const { data } = useQuery<ToDo[]>(["todos"], () => getTodos(slug), {
     enabled: !!slug,
     refetchOnWindowFocus: false,
+  });
+  const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
+    onMutate: async (deleteTodo) => {
+      await client.cancelQueries(["todos"]);
+      const nextTodos = data?.filter((todo) => todo.id !== deleteTodo.id);
+      client.setQueryData(["todos"], nextTodos);
+      return nextTodos;
+    },
+    onSettled: (nextTodos) => {
+      updatePrioritiesAsync(
+        nextTodos.map(({ id, priority }) => ({ id, priority }))
+      );
+    },
   });
 
   useEffect(
@@ -136,6 +180,7 @@ const Home: NextPage = () => {
             slug={slug}
             setList={setList}
             list={list}
+            updatePrioritiesAsync={updatePrioritiesAsync}
           />
         </div>
       </main>

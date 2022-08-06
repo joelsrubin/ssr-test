@@ -23,7 +23,7 @@ export function Input({
     e.preventDefault();
     const sanitized = DOMPurify.sanitize(text);
     if (sanitized.length > 0) {
-      await fetch("/api/add-todos", {
+      const updatedList = await fetch("/api/add-todos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,10 +35,12 @@ export function Input({
           priority: todos?.length || 0,
         }),
       });
+
+      return await updatedList.json();
     }
   };
   const { mutate, isLoading } = useMutation(handleSubmit, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       setText("");
       // operation to consider adding the slug to the list
       const listContainsSlug = list.some((item) => item.slug === slug);
@@ -46,7 +48,7 @@ export function Input({
         setList([...list, { slug, href: window.location.href }]);
       }
 
-      client.invalidateQueries(["todos"]);
+      client.setQueryData(["todos"], data);
     },
   });
 

@@ -23,6 +23,7 @@ type TListProps = {
   setList: (list: TListItem[]) => void;
   list: TListItem[];
   todos: ToDo[] | undefined;
+  updatePrioritiesAsync: (data: { id: string; priority: number }[]) => void;
 };
 
 function EmptyRow() {
@@ -45,26 +46,11 @@ export const List: React.FC<TListProps> = ({
   slug,
   setList,
   list,
+  updatePrioritiesAsync,
 }) => {
   const client = useQueryClient();
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
   const [isDragging, setIsDragging] = useState(false);
-  const { mutate } = useMutation(
-    async (data: { id: string; priority: number }[]) => {
-      await fetch("/api/update-todo-priority", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-    },
-    {
-      onSuccess: () => {
-        client.invalidateQueries(["todos"]);
-      },
-    }
-  );
 
   useEffect(
     function updateTodosFromDBAndSort() {
@@ -84,9 +70,9 @@ export const List: React.FC<TListProps> = ({
       return { id: todo.id, priority: i, text: todo.text };
     });
 
-    mutate(idsWithPriority);
+    updatePrioritiesAsync(idsWithPriority);
     setIsDragging(false);
-  }, [sortableList, mutate]);
+  }, [sortableList, updatePrioritiesAsync]);
 
   useEffect(() => {
     if (lastListElementRef.current) {

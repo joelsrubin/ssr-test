@@ -4,7 +4,7 @@ export default async function handle(req, res) {
   const { id } = req.query;
   const { completed } = req.body;
 
-  await prisma.toDo.update({
+  const todo = await prisma.toDo.update({
     where: {
       id,
     },
@@ -13,5 +13,11 @@ export default async function handle(req, res) {
     },
   });
 
-  res.json("Todo updated!");
+  const updatedTodos = await prisma.toDo.findMany({
+    where: {
+      slugId: todo.slugId,
+    },
+  });
+
+  res.json(updatedTodos);
 }
