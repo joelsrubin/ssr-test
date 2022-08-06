@@ -48,7 +48,6 @@ export const List: React.FC<TListProps> = ({
   list,
   updatePrioritiesAsync,
 }) => {
-  const client = useQueryClient();
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -84,7 +83,7 @@ export const List: React.FC<TListProps> = ({
   }, [sortableList]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center h-screen max-h-50 py-10 select-none">
+    <div className="w-full flex flex-col items-start h-full max-h-3/4 select-none">
       <ul className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 overflow-auto shadow-md gap-2">
         <Reorder.Group
           axis="y"

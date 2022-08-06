@@ -61,7 +61,7 @@ export function Input({
           placeholder="what todo?"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="inherit outline-none bg-transparent p-4 w-1/2"
+          className="inherit outline-none bg-transparent p-4 w-3/4"
         />
 
         {isLoading ? (
