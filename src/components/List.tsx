@@ -73,7 +73,7 @@ export const List: React.FC<TListProps> = ({
 
   return (
     <div className="w-full flex flex-col items-center h-3/4 max-h-3/4 select-none justify-center">
-      <ul className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 overflow-auto shadow-md gap-2">
+      <ul className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 lg:w-1/2 overflow-auto shadow-md gap-2">
         <li>
           <Input slug={slug} setList={setList} list={list} todos={todos} />
         </li>

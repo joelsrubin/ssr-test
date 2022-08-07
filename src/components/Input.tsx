@@ -59,10 +59,10 @@ export function Input({
         <input
           type="text"
           name="text"
-          placeholder="what todo?"
+          placeholder="What's next?"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="inherit outline-none bg-transparent p-4 w-3/4 selection-white selection:bg-slate-200"
+          className="inherit outline-none bg-transparent p-4 w-3/4 selection-white selection:bg-slate-200 "
           spellCheck={false}
         />
 

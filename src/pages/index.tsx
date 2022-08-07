@@ -11,26 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 import Icon from "../components/Icon";
-
-async function getTodos(slug: string | undefined | string[]) {
-  const response = await fetch(`/api/get-todos/${slug}`);
-  return await response.json();
-}
-async function deleteTodo(todo: ToDo) {
-  const updatedTodos = await fetch(`/api/delete-todo/${todo.id}`);
-  return await updatedTodos.json();
-}
-
-async function updateTodo({ id, completed }: ToDo) {
-  const updated = await fetch(`/api/update-todo/${id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ completed }),
-  });
-  return await updated.json();
-}
+import { deleteTodo, getTodos, updateTodo } from "../services";
 
 export type TListItem = {
   href: string;
@@ -43,6 +24,14 @@ const Home: NextPage = () => {
 
   const client = useQueryClient();
   const router = useRouter();
+  const { data: _globalTodos } = useQuery<ToDo[]>(
+    ["todos"],
+    () => getTodos(slug),
+    {
+      enabled: !!slug,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const { mutate: updatePrioritiesAsync } = useMutation(
     async (data: { id: string; priority: number }[]) => {
@@ -63,39 +52,35 @@ const Home: NextPage = () => {
   );
 
   const { mutate: updateTodoAsync } = useMutation(updateTodo, {
-    onMutate: (data) => {
-      client.cancelQueries(["todos"]);
-      const updatedTodos: ToDo[] | undefined = client.getQueryData(["todos"]);
-      if (updatedTodos) {
-        let listWithoutUpdated = [...updatedTodos].filter((todo) => {
-          return todo.id !== data.id;
-        });
-        listWithoutUpdated.push({
-          ...data,
-          completed: data.completed,
-        });
+    onMutate: async (newTodo) => {
+      await client.cancelQueries(["todos"]);
 
-        client.setQueryData(["todos"], listWithoutUpdated);
-      }
+      let listWithoutUpdated = [..._globalTodos!].filter(
+        (todo) => todo.id !== newTodo.id
+      );
+      listWithoutUpdated.push({
+        ...newTodo,
+        completed: newTodo.completed,
+      });
+
+      client.setQueryData(["todos"], listWithoutUpdated);
     },
-    onSuccess: () => {
-      client.invalidateQueries(["todos"]);
+    onSuccess: async () => {
+      await client.invalidateQueries(["todos"]);
     },
   });
 
-  const { data } = useQuery<ToDo[]>(["todos"], () => getTodos(slug), {
-    enabled: !!slug,
-    refetchOnWindowFocus: false,
-  });
   const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
     onMutate: async (deleteTodo) => {
       await client.cancelQueries(["todos"]);
-      const nextTodos = data?.filter((todo) => todo.id !== deleteTodo.id);
+      const nextTodos = _globalTodos?.filter(
+        (todo) => todo.id !== deleteTodo.id
+      );
       client.setQueryData(["todos"], nextTodos);
       return nextTodos;
     },
-    onSettled: (nextTodos) => {
-      updatePrioritiesAsync(
+    onSettled: async (nextTodos) => {
+      await updatePrioritiesAsync(
         nextTodos.map(({ id, priority }) => ({ id, priority }))
       );
     },
@@ -124,8 +109,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
       </Head>
       <main className="flex flex-col mx-auto min-h-screen justify-start">
-        <div className="sticky top-0 p-4">
-          <div className="flex flex-row w-fit gap-4">
+        <div className="sticky top-0 p-4 bg-amber-50">
+          <div className="flex flex-row gap-4 justify-between">
             <Icon
               img={`/share.svg`}
               alt="share"
@@ -173,9 +158,9 @@ const Home: NextPage = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-full h-3/4">
+        <div className="flex flex-col w-full h-3/4 py-4">
           <List
-            todos={data}
+            todos={_globalTodos}
             handleDone={updateTodoAsync}
             deleteTodo={deleteTodoAsync}
             slug={slug}
