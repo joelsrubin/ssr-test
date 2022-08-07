@@ -7,7 +7,6 @@ import { Input } from "./Input";
 import { Reorder } from "framer-motion";
 
 import type { TListItem } from "../pages";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export type ToDo = {
   id: string;
@@ -104,7 +103,7 @@ export const List: React.FC<TListProps> = ({
                     isDragging ? "cursor-grabbing" : "cursor-grab"
                   } ${
                     dragNode.current === todo && "bg-gray-200 opacity-50 z-10"
-                  } `}
+                  } ${!isDragging && "hover:bg-gray-100"}`}
                 >
                   <div className="flex flex-row">
                     <div
