@@ -42,13 +42,19 @@ function getInitialColorMode() {
 const Home: NextPage = () => {
   const [slug, setSlug] = useState<undefined | string>();
   const [list, setList] = useLocalStorage<TListItem[]>("slugList", []);
-  const [colorMode, rawSetColorMode] = useState(getInitialColorMode);
+  const [colorMode, rawSetColorMode] = useState<string | undefined>(undefined);
   const setColorMode = (value) => {
     rawSetColorMode(value);
     // Persist it on update
     window.localStorage.setItem("color-mode", value);
     document.documentElement.setAttribute("class", value);
   };
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const initialColorValue = root.getAttribute("class");
+    rawSetColorMode(initialColorValue!);
+  }, []);
 
   const isDarkMode = colorMode === "dark";
   const client = useQueryClient();
@@ -203,7 +209,9 @@ const Home: NextPage = () => {
               />
             </div>
             <div
-              className="px-4 hover:scale-110 duration-200 cursor-pointer"
+              className={`px-4 cursor-pointer ${
+                isDarkMode && "animate-spin-in"
+              }`}
               onClick={() => {
                 setColorMode(isDarkMode ? "light" : "dark");
               }}
@@ -213,7 +221,7 @@ const Home: NextPage = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-full h-3/4 py-4">
+        <div className="flex flex-col w-full h-3/4 pt-20">
           <List
             todos={_globalTodos}
             handleDone={updateTodoAsync}
@@ -231,8 +239,4 @@ const Home: NextPage = () => {
   );
 };
 
-// export default Home;
-const NonSSRWrapper = () => <Home />;
-export default dynamic(() => Promise.resolve(NonSSRWrapper), {
-  ssr: false,
-});
+export default Home;
