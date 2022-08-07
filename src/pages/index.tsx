@@ -107,6 +107,7 @@ const Home: NextPage = () => {
         <meta name="description" content="my ssr todo app" />
         <link rel="apple-touch-icon" href="/airplane.png" />
         <link rel="icon" href="/trashcan.svg" />
+        <meta name="theme-color" content="#fffbeb" />
       </Head>
       <main className="flex flex-col mx-auto min-h-screen justify-start">
         <div className="sticky top-0 p-4 bg-amber-50">
