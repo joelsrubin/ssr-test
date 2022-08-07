@@ -66,7 +66,9 @@ export function Input({
           placeholder="What's next?"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="inherit outline-none bg-transparent p-4 w-3/4 selection-white selection:bg-slate-200 "
+          className={`leading-8 inherit outline-none bg-transparent p-4 w-3/4 dark:selection:bg-black selection:bg-slate-200 ${
+            isDarkMode && "text-white"
+          }`}
           spellCheck={false}
         />
 

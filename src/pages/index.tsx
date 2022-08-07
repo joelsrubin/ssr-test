@@ -131,7 +131,7 @@ const Home: NextPage = () => {
                 className="hover:scale-110 duration-200 cursor-pointer transition-colors"
                 onClick={() => {
                   toast((t) => (
-                    <div className={`flex flex-col`}>
+                    <div className="flex flex-col ">
                       <p className="text-sm font-lg text-gray-900 text-center p-4">
                         Recent Lists
                       </p>
