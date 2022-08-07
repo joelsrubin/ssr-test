@@ -9,7 +9,7 @@ import { generateSlug } from "random-word-slugs";
 import { useLocalStorage, useDarkMode } from "usehooks-ts";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { IconSun, IconSunglasses, IconShare, IconFolder } from "@tabler/icons";
+import { IconSun, IconMoonStars, IconShare, IconFolder } from "@tabler/icons";
 
 import { deleteTodo, getTodos, updateTodo } from "../services";
 
@@ -193,14 +193,12 @@ const Home: NextPage = () => {
               />
             </div>
             <div
-              className={`px-4 cursor-pointer ${
-                isDarkMode && "animate-spin-in"
-              }`}
+              className="px-4 cursor-pointer dark:animate-spin-in"
               onClick={() => {
                 setColorMode(isDarkMode ? "light" : "dark");
               }}
             >
-              {isDarkMode ? <IconSun color="white" /> : <IconSunglasses />}
+              {isDarkMode ? <IconSun color="white" /> : <IconMoonStars />}
             </div>
           </div>
         </div>

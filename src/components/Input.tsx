@@ -6,7 +6,6 @@ import { SyncLoader } from "react-spinners";
 import type { TListItem } from "../pages";
 import { ToDo } from "./List";
 import { IconPencilPlus } from "@tabler/icons";
-import { useDarkMode } from "usehooks-ts";
 
 export function Input({
   slug,

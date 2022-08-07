@@ -6,7 +6,7 @@ import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { Input } from "./Input";
 import { Reorder } from "framer-motion";
 
-import { styleObj, TListItem } from "../pages";
+import { TListItem } from "../pages";
 
 export type ToDo = {
   id: string;
@@ -27,13 +27,18 @@ type TListProps = {
   colorMode: string | undefined;
 };
 
+const emojiObj = {
+  light: "😎",
+  dark: "🫥",
+};
+
 function EmptyRow({ colorMode }: { colorMode: string | undefined }) {
   return (
     <li className={`flex flex-row justify-center`}>
       <div className="px-10 py-5 text-center dark:text-white">empty list!</div>
       <div className="px-10 py-5 text-center">
         <span className="text-xl">
-          <h1>{styleObj[colorMode!]}</h1>
+          <h1>{emojiObj[colorMode!]}</h1>
         </span>
       </div>
     </li>
