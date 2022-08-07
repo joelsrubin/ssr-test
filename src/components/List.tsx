@@ -28,8 +28,8 @@ type TListProps = {
 
 function EmptyRow() {
   return (
-    <li className="flex flex-row justify-center">
-      <div className="px-10 py-5 text-center">Add A Todo</div>
+    <li className={`flex flex-row justify-center`}>
+      <div className="px-10 py-5 text-center">empty list</div>
       <div className="px-10 py-5 text-center">
         <span className="text-xl">
           <h1>🫥</h1>
@@ -60,7 +60,6 @@ export const List: React.FC<TListProps> = ({
     [todos]
   );
 
-  const lastListElementRef = useRef<HTMLLIElement>(null);
   const dragNode = useRef<ToDo | null>(null);
 
   const updatePriority = useCallback(async () => {
@@ -72,15 +71,6 @@ export const List: React.FC<TListProps> = ({
     updatePrioritiesAsync(idsWithPriority);
     setIsDragging(false);
   }, [sortableList, updatePrioritiesAsync]);
-
-  useEffect(() => {
-    if (lastListElementRef.current) {
-      lastListElementRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-  }, [sortableList]);
 
   return (
     <div className="w-full flex flex-col items-center h-3/4 max-h-3/4 select-none justify-center">

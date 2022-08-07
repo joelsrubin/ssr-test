@@ -1,10 +1,11 @@
 import React from "react";
 import DOMPurify from "dompurify";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { TailSpin } from "react-loader-spinner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { SyncLoader } from "react-spinners";
 import type { TListItem } from "../pages";
 import { ToDo } from "./List";
+import { IconPencilPlus } from "@tabler/icons";
 
 export function Input({
   slug,
@@ -54,23 +55,27 @@ export function Input({
 
   return (
     <form onSubmit={mutate}>
-      <div className="flex flex-row justify-between bg-gradient-to-r from-cyan-200 to-blue-300 text-black placeholder-current ">
+      <div className="flex flex-row justify-between bg-gradient-to-r from-cyan-200 to-blue-300 placeholder-gray-200">
         <input
           type="text"
           name="text"
           placeholder="what todo?"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="inherit outline-none bg-transparent p-4 w-3/4"
+          className="inherit outline-none bg-transparent p-4 w-3/4 selection-white selection:bg-slate-200"
+          spellCheck={false}
         />
 
         {isLoading ? (
-          <div className="flex justify-center">
-            <TailSpin height="20" width="20" color="white" />
+          <div className="flex justify-center p-4">
+            <SyncLoader color="black" size={8} cssOverride={{ opacity: 0.5 }} />
           </div>
         ) : (
-          <button type="submit" className="hover:underline p-4 shrink-0">
-            Add
+          <button
+            type="submit"
+            className="hover:scale-110 duration-200 p-4 shrink-0"
+          >
+            <IconPencilPlus />
           </button>
         )}
       </div>
