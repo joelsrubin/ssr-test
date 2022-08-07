@@ -12,7 +12,6 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { IconSun, IconSunglasses, IconShare, IconFolder } from "@tabler/icons";
 
 import { deleteTodo, getTodos, updateTodo } from "../services";
-import dynamic from "next/dynamic";
 
 export type TListItem = {
   href: string;
@@ -149,7 +148,7 @@ const Home: NextPage = () => {
           <div className="flex flex-row gap-4 justify-between">
             <div className="flex flex-row justify-evenly w-1/4 sm:w-1/5">
               <IconShare
-                color={isDarkMode ? "white" : "black"}
+                color={colorMode === "dark" ? "white" : "black"}
                 className="hover:scale-110 duration-200 cursor-pointer"
                 onClick={async () => {
                   await navigator.clipboard.writeText(window.location.href);
@@ -167,7 +166,7 @@ const Home: NextPage = () => {
               />
               <IconFolder
                 color={isDarkMode ? "white" : "black"}
-                className="hover:scale-110 duration-200 cursor-pointer transition-colors"
+                className="hover:scale-110 duration-200 cursor-pointer"
                 onClick={() => {
                   toast(
                     (t) => (

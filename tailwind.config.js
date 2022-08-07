@@ -29,11 +29,11 @@ module.exports = {
         },
         "spin-in": {
           from: {
-            transform: "rotate(0deg)",
+            // transform: "rotate(0deg)",
             opacity: "0",
           },
           to: {
-            transform: "rotate(12deg)",
+            transform: "rotate(45deg)",
             opacity: "1",
           },
         },
@@ -41,7 +41,7 @@ module.exports = {
       animation: {
         "fade-in-down": "fade-in-down 0.5s ease-in",
         "fade-out-up": "fade-out-up 0.5s ease-in",
-        "spin-in": "spin 1.5s ease-in-out",
+        "spin-in": "spin 1.5s ease-out",
       },
     },
   },
