@@ -83,8 +83,11 @@ export const List: React.FC<TListProps> = ({
   }, [sortableList]);
 
   return (
-    <div className="w-full flex flex-col items-start h-full max-h-3/4 select-none">
+    <div className="w-full flex flex-col items-center h-3/4 max-h-3/4 select-none justify-center">
       <ul className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 overflow-auto shadow-md gap-2">
+        <li>
+          <Input slug={slug} setList={setList} list={list} todos={todos} />
+        </li>
         <Reorder.Group
           axis="y"
           values={sortableList}
@@ -125,7 +128,7 @@ export const List: React.FC<TListProps> = ({
                       className={`cursor-pointer p-4 pt-5 ${
                         todo.completed &&
                         "line-through decoration-4 text-gray-500"
-                      } transition-colors`}
+                      } transition-colors duration-500`}
                       onClick={() =>
                         handleDone({ ...todo, completed: !todo.completed })
                       }
@@ -154,9 +157,6 @@ export const List: React.FC<TListProps> = ({
           ) : (
             <EmptyRow />
           )}
-          <li ref={lastListElementRef}>
-            <Input slug={slug} setList={setList} list={list} todos={todos} />
-          </li>
         </Reorder.Group>
       </ul>
     </div>

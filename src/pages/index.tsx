@@ -123,7 +123,7 @@ const Home: NextPage = () => {
         <link rel="apple-touch-icon" href="/airplane.png" />
         <link rel="icon" href="/trashcan.svg" />
       </Head>
-      <main className="flex flex-col mx-auto h-full justify-evenly">
+      <main className="flex flex-col mx-auto min-h-screen justify-start">
         <div className="sticky top-0 p-4">
           <div className="flex flex-row w-fit gap-4">
             <Icon
@@ -173,7 +173,7 @@ const Home: NextPage = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full h-3/4">
           <List
             todos={data}
             handleDone={updateTodoAsync}

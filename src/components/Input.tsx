@@ -54,7 +54,7 @@ export function Input({
 
   return (
     <form onSubmit={mutate}>
-      <div className="flex flex-row justify-between border-t-2 border-gray-200 bg-gray-200">
+      <div className="flex flex-row justify-between bg-gradient-to-r from-cyan-200 to-blue-300 text-black placeholder-current ">
         <input
           type="text"
           name="text"
@@ -65,8 +65,8 @@ export function Input({
         />
 
         {isLoading ? (
-          <div>
-            <TailSpin height="20" width="20" color="gray" />
+          <div className="flex justify-center">
+            <TailSpin height="20" width="20" color="white" />
           </div>
         ) : (
           <button type="submit" className="hover:underline p-4 shrink-0">
