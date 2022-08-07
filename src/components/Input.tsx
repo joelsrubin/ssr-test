@@ -13,15 +13,17 @@ export function Input({
   setList,
   list,
   todos,
+  isDarkMode,
 }: {
   slug: string | undefined;
   setList: (list: TListItem[]) => void;
   list: TListItem[];
   todos: ToDo[] | undefined;
+  isDarkMode: boolean;
 }) {
   const [text, setText] = React.useState("");
   const client = useQueryClient();
-  const { isDarkMode } = useDarkMode();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const sanitized = DOMPurify.sanitize(text);

@@ -178,6 +178,7 @@ const Home: NextPage = () => {
             setList={setList}
             list={list}
             updatePrioritiesAsync={updatePrioritiesAsync}
+            isDarkMode={isDarkMode}
           />
         </div>
       </main>
