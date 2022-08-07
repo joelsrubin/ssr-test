@@ -118,7 +118,10 @@ const Home: NextPage = () => {
     },
     [router]
   );
-
+  const metaObj = {
+    dark: "#1F2937",
+    light: "#fffbeb",
+  };
   return (
     <>
       <Head>
@@ -126,7 +129,7 @@ const Home: NextPage = () => {
         <meta name="description" content="my ssr todo app" />
         <link rel="apple-touch-icon" href="/airplane.png" />
         <link rel="icon" href="/trashcan.svg" />
-        <meta name="theme-color" content="dark:#1F2937 #fffbeb" />
+        <meta name="theme-color" content={metaObj[colorMode!]} />
       </Head>
       <main className="flex flex-col mx-auto min-h-screen justify-start dark:bg-black transition-colors duration-500">
         <div className="sticky top-0 p-4 bg-amber-50 dark:bg-gray-800">
