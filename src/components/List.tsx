@@ -6,7 +6,7 @@ import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { Input } from "./Input";
 import { Reorder } from "framer-motion";
 
-import type { TListItem } from "../pages";
+import { styleObj, TListItem } from "../pages";
 
 export type ToDo = {
   id: string;
@@ -24,15 +24,16 @@ type TListProps = {
   todos: ToDo[] | undefined;
   isDarkMode: boolean;
   updatePrioritiesAsync: (data: { id: string; priority: number }[]) => void;
+  colorMode: string | undefined;
 };
 
-function EmptyRow({ isDarkMode }: { isDarkMode: boolean }) {
+function EmptyRow({ colorMode }: { colorMode: string | undefined }) {
   return (
     <li className={`flex flex-row justify-center`}>
       <div className="px-10 py-5 text-center dark:text-white">empty list!</div>
       <div className="px-10 py-5 text-center">
         <span className="text-xl">
-          <h1>{isDarkMode ? "🫥" : "😎"}</h1>
+          <h1>{styleObj[colorMode!]}</h1>
         </span>
       </div>
     </li>
@@ -48,6 +49,7 @@ export const List: React.FC<TListProps> = ({
   list,
   updatePrioritiesAsync,
   isDarkMode,
+  colorMode,
 }) => {
   const [sortableList, setSortableList] = useState<ToDo[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -148,7 +150,7 @@ export const List: React.FC<TListProps> = ({
               </Reorder.Item>
             ))
           ) : (
-            <EmptyRow isDarkMode={isDarkMode} />
+            <EmptyRow colorMode={colorMode} />
           )}
         </Reorder.Group>
       </ul>

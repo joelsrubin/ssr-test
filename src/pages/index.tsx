@@ -150,7 +150,7 @@ const Home: NextPage = () => {
                 }}
               />
               <IconFolder
-                color={isDarkMode ? "white" : "black"}
+                color={styleObj[colorMode!]}
                 className="hover:scale-110 duration-200 cursor-pointer"
                 onClick={() => {
                   toast(
@@ -215,6 +215,7 @@ const Home: NextPage = () => {
             list={list}
             updatePrioritiesAsync={updatePrioritiesAsync}
             isDarkMode={isDarkMode}
+            colorMode={colorMode}
           />
         </div>
       </main>
