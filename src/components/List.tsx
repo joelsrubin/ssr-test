@@ -26,13 +26,13 @@ type TListProps = {
   updatePrioritiesAsync: (data: { id: string; priority: number }[]) => void;
 };
 
-function EmptyRow() {
+function EmptyRow({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <li className={`flex flex-row justify-center`}>
       <div className="px-10 py-5 text-center dark:text-white">empty list!</div>
       <div className="px-10 py-5 text-center">
         <span className="text-xl">
-          <h1>🫥</h1>
+          <h1>{isDarkMode ? "🫥" : "😎"}</h1>
         </span>
       </div>
     </li>
@@ -148,7 +148,7 @@ export const List: React.FC<TListProps> = ({
               </Reorder.Item>
             ))
           ) : (
-            <EmptyRow />
+            <EmptyRow isDarkMode={isDarkMode} />
           )}
         </Reorder.Group>
       </ul>
