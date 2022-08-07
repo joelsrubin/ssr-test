@@ -112,7 +112,7 @@ const Home: NextPage = () => {
         <meta name="theme-color" content={isDarkMode ? "#1F2937" : "#fffbeb"} />
       </Head>
       <main className="flex flex-col mx-auto min-h-screen justify-start dark:bg-black transition-colors duration-500">
-        <div className="sticky top-0 p-4 bg-amber-50 dark:bg-gray-800 transition-colors duration-500 delay-75">
+        <div className="sticky top-0 p-4 bg-amber-50 dark:bg-gray-800">
           <div className="flex flex-row gap-4 justify-between">
             <div className="flex flex-row justify-evenly w-1/4 sm:w-1/5">
               <IconShare
