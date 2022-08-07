@@ -34,8 +34,8 @@ const emojiObj = {
 
 function EmptyRow({ colorMode }: { colorMode: string | undefined }) {
   return (
-    <li className={`flex flex-row justify-center`}>
-      <div className="px-10 py-5 text-center dark:text-white">empty list!</div>
+    <li className="flex flex-row justify-between">
+      <div className="px-4 py-5 text-center dark:text-white">empty list!</div>
       <div className="px-10 py-5 text-center">
         <span className="text-xl">
           <h1>{emojiObj[colorMode!]}</h1>
