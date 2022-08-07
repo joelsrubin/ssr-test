@@ -2,7 +2,7 @@ import Image from "next/image";
 import { marked } from "marked";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IconGripVertical } from "@tabler/icons";
+import { IconGripVertical, IconTrash } from "@tabler/icons";
 import { Input } from "./Input";
 import { Reorder } from "framer-motion";
 
@@ -28,7 +28,7 @@ type TListProps = {
 function EmptyRow() {
   return (
     <li className={`flex flex-row justify-center`}>
-      <div className="px-10 py-5 text-center">empty list</div>
+      <div className="px-10 py-5 text-center dark:text-white">empty list!</div>
       <div className="px-10 py-5 text-center">
         <span className="text-xl">
           <h1>🫥</h1>
@@ -103,7 +103,9 @@ export const List: React.FC<TListProps> = ({
                     isDragging ? "cursor-grabbing" : "cursor-grab"
                   } ${
                     dragNode.current === todo && "bg-gray-200 opacity-50 z-10"
-                  } ${!isDragging && "hover:bg-gray-100"}`}
+                  } ${
+                    !isDragging && "hover:bg-gray-100"
+                  } dark:bg-black dark:text-white`}
                 >
                   <div className="flex flex-row">
                     <div
@@ -131,13 +133,7 @@ export const List: React.FC<TListProps> = ({
                       className="cursor-pointer"
                       onClick={() => deleteTodo(todo)}
                     >
-                      <Image
-                        src="/trashcan.svg"
-                        alt="delete"
-                        height={25}
-                        width={25}
-                        className="min-h-25 min-w-25 shrink-0 hover:scale-110 duration-200"
-                      />
+                      <IconTrash className="min-h-25 min-w-25 shrink-0 hover:scale-110 duration-200 dark:white" />
                     </button>
                   </div>
                 </li>

@@ -6,6 +6,7 @@ import { SyncLoader } from "react-spinners";
 import type { TListItem } from "../pages";
 import { ToDo } from "./List";
 import { IconPencilPlus } from "@tabler/icons";
+import { useDarkMode } from "usehooks-ts";
 
 export function Input({
   slug,
@@ -20,6 +21,7 @@ export function Input({
 }) {
   const [text, setText] = React.useState("");
   const client = useQueryClient();
+  const { isDarkMode } = useDarkMode();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const sanitized = DOMPurify.sanitize(text);
@@ -55,7 +57,7 @@ export function Input({
 
   return (
     <form onSubmit={mutate}>
-      <div className="flex flex-row justify-between bg-gradient-to-r from-cyan-200 to-blue-300 placeholder-gray-200">
+      <div className="dark:bg-gradient-to-r dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500 flex flex-row justify-between bg-gradient-to-r from-cyan-200 to-blue-300 placeholder-gray-200">
         <input
           type="text"
           name="text"
@@ -68,7 +70,11 @@ export function Input({
 
         {isLoading ? (
           <div className="flex justify-center p-4">
-            <SyncLoader color="black" size={8} cssOverride={{ opacity: 0.5 }} />
+            <SyncLoader
+              color={isDarkMode ? "white" : "black"}
+              size={8}
+              cssOverride={{ opacity: 0.5 }}
+            />
           </div>
         ) : (
           <button

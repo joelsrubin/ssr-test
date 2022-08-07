@@ -6,12 +6,13 @@ import { List, ToDo } from "../components/List";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { generateSlug } from "random-word-slugs";
-import { useLocalStorage } from "usehooks-ts";
+import { useLocalStorage, useDarkMode } from "usehooks-ts";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { IconSun, IconSunglasses, IconShare, IconFolder } from "@tabler/icons";
 
-import Icon from "../components/Icon";
 import { deleteTodo, getTodos, updateTodo } from "../services";
+import dynamic from "next/dynamic";
 
 export type TListItem = {
   href: string;
@@ -21,6 +22,7 @@ export type TListItem = {
 const Home: NextPage = () => {
   const [slug, setSlug] = useState<undefined | string>();
   const [list, setList] = useLocalStorage<TListItem[]>("slugList", []);
+  const { isDarkMode, toggle: toggleDarkMode } = useDarkMode();
 
   const client = useQueryClient();
   const router = useRouter();
@@ -101,7 +103,7 @@ const Home: NextPage = () => {
   );
 
   return (
-    <>
+    <div className={`${isDarkMode ? "dark" : ""}`}>
       <Head>
         <title>SSR Todos</title>
         <meta name="description" content="my ssr todo app" />
@@ -109,53 +111,61 @@ const Home: NextPage = () => {
         <link rel="icon" href="/trashcan.svg" />
         <meta name="theme-color" content="#fffbeb" />
       </Head>
-      <main className="flex flex-col mx-auto min-h-screen justify-start">
-        <div className="sticky top-0 p-4 bg-amber-50">
+      <main className="flex flex-col mx-auto min-h-screen justify-start dark:bg-black transition-colors duration-500">
+        <div className="sticky top-0 p-4 bg-amber-50 dark:bg-gray-800 transition-colors duration-500 delay-75">
           <div className="flex flex-row gap-4 justify-between">
-            <Icon
-              img={`/share.svg`}
-              alt="share"
-              clickHandler={async () => {
-                await navigator.clipboard.writeText(window.location.href);
-                toast.success(`${slug} has been copied to clipboard!`, {
-                  duration: 3500,
-                  icon: "👏",
-                });
-              }}
-            />
-            <Icon
-              img="/database.svg"
-              alt="saved lists"
-              clickHandler={() => {
-                toast((t) => (
-                  <div className={`flex flex-col`}>
-                    <p className="text-sm font-lg text-gray-900 text-center p-4">
-                      Recent Lists
-                    </p>
-                    <ul>
-                      {list
-                        .slice(-5)
-                        .reverse()
-                        .map((listItem) => (
-                          <a href={listItem.href} key={listItem.href}>
-                            <li className="flex flex-col items-center justify-center p-4 hover:underline hover:bg-slate-100 cursor-pointer">
-                              {listItem.slug}
-                            </li>
-                          </a>
-                        ))}
-                    </ul>
-                    <div className="flex">
-                      <button
-                        onClick={() => toast.dismiss(t.id)}
-                        className="w-full border border-transparent rounded-sm p-4 flex items-center justify-center text-sm font-medium text-blue-500 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      >
-                        Close
-                      </button>
+            <div className="flex flex-row justify-evenly w-1/4 sm:w-1/5">
+              <IconShare
+                color={isDarkMode ? "white" : "black"}
+                className="hover:scale-110 duration-200 cursor-pointer"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(window.location.href);
+                  toast.success(`${slug} has been copied to clipboard!`, {
+                    duration: 3500,
+                    icon: "👏",
+                  });
+                }}
+              />
+              <IconFolder
+                color={isDarkMode ? "white" : "black"}
+                className="hover:scale-110 duration-200 cursor-pointer transition-colors"
+                onClick={() => {
+                  toast((t) => (
+                    <div className={`flex flex-col`}>
+                      <p className="text-sm font-lg text-gray-900 text-center p-4">
+                        Recent Lists
+                      </p>
+                      <ul>
+                        {list
+                          .slice(-5)
+                          .reverse()
+                          .map((listItem) => (
+                            <a href={listItem.href} key={listItem.href}>
+                              <li className="flex flex-col items-center justify-center p-4 hover:underline hover:bg-slate-100 cursor-pointer">
+                                {listItem.slug}
+                              </li>
+                            </a>
+                          ))}
+                      </ul>
+                      <div className="flex">
+                        <button
+                          onClick={() => toast.dismiss(t.id)}
+                          className="w-full border border-transparent rounded-sm p-4 flex items-center justify-center text-sm font-medium text-blue-500 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        >
+                          Close
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ));
-              }}
-            />
+                  ));
+                }}
+              />
+            </div>
+            <div
+              className="px-4 hover:scale-110 duration-200 cursor-pointer"
+              onClick={toggleDarkMode}
+            >
+              {isDarkMode ? <IconSun color="white" /> : <IconSunglasses />}
+            </div>
           </div>
         </div>
 
@@ -172,8 +182,11 @@ const Home: NextPage = () => {
         </div>
       </main>
       <Toaster />
-    </>
+    </div>
   );
 };
 
-export default Home;
+const NonSSRWrapper = () => <Home />;
+export default dynamic(() => Promise.resolve(NonSSRWrapper), {
+  ssr: false,
+});
