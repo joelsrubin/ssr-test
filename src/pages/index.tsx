@@ -13,30 +13,15 @@ import { IconSun, IconSunglasses, IconShare, IconFolder } from "@tabler/icons";
 
 import { deleteTodo, getTodos, updateTodo } from "../services";
 
+export const styleObj = {
+  dark: "white",
+  light: "black",
+};
+
 export type TListItem = {
   href: string;
   slug: string;
 };
-
-function getInitialColorMode() {
-  const persistedColorPreference = window.localStorage.getItem("color-mode");
-  const hasPersistedPreference = typeof persistedColorPreference === "string";
-  // If the user has explicitly chosen light or dark,
-  // let's use it. Otherwise, this value will be null.
-  if (hasPersistedPreference) {
-    return persistedColorPreference;
-  }
-  // If they haven't been explicit, let's check the media
-  // query
-  const mql = window.matchMedia("(prefers-color-scheme: dark)");
-  const hasMediaQueryPreference = typeof mql.matches === "boolean";
-  if (hasMediaQueryPreference) {
-    return mql.matches ? "dark" : "light";
-  }
-  // If they are using a browser/OS that doesn't support
-  // color themes, let's default to 'light'.
-  return "light";
-}
 
 const Home: NextPage = () => {
   const [slug, setSlug] = useState<undefined | string>();
@@ -44,7 +29,7 @@ const Home: NextPage = () => {
   const [colorMode, rawSetColorMode] = useState<string | undefined>(undefined);
   const setColorMode = (value) => {
     rawSetColorMode(value);
-    // Persist it on update
+
     window.localStorage.setItem("color-mode", value);
     document.documentElement.setAttribute("class", value);
   };
@@ -141,14 +126,14 @@ const Home: NextPage = () => {
         <meta name="description" content="my ssr todo app" />
         <link rel="apple-touch-icon" href="/airplane.png" />
         <link rel="icon" href="/trashcan.svg" />
-        <meta name="theme-color" content={isDarkMode ? "#1F2937" : "#fffbeb"} />
+        <meta name="theme-color" content="dark:#1F2937 #fffbeb" />
       </Head>
       <main className="flex flex-col mx-auto min-h-screen justify-start dark:bg-black transition-colors duration-500">
         <div className="sticky top-0 p-4 bg-amber-50 dark:bg-gray-800">
           <div className="flex flex-row gap-4 justify-between">
             <div className="flex flex-row justify-evenly w-1/4 sm:w-1/5">
               <IconShare
-                color={colorMode === "dark" ? "white" : "black"}
+                color={styleObj[colorMode!]}
                 className="hover:scale-110 duration-200 cursor-pointer"
                 onClick={async () => {
                   await navigator.clipboard.writeText(window.location.href);
