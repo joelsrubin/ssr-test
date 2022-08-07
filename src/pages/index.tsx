@@ -150,6 +150,12 @@ const Home: NextPage = () => {
                   toast.success(`${slug} has been copied to clipboard!`, {
                     duration: 3500,
                     icon: "👏",
+                    style: {
+                      borderRadius: "10px",
+                      background: isDarkMode ? "#1F2937" : "white",
+                      border: isDarkMode ? "1px solid white" : "",
+                      color: isDarkMode ? "#fff" : "black",
+                    },
                   });
                 }}
               />
@@ -157,33 +163,42 @@ const Home: NextPage = () => {
                 color={isDarkMode ? "white" : "black"}
                 className="hover:scale-110 duration-200 cursor-pointer transition-colors"
                 onClick={() => {
-                  toast((t) => (
-                    <div className="flex flex-col ">
-                      <p className="text-sm font-lg text-gray-900 text-center p-4">
-                        Recent Lists
-                      </p>
-                      <ul>
-                        {list
-                          .slice(-5)
-                          .reverse()
-                          .map((listItem) => (
-                            <a href={listItem.href} key={listItem.href}>
-                              <li className="flex flex-col items-center justify-center p-4 hover:underline hover:bg-slate-100 cursor-pointer">
-                                {listItem.slug}
-                              </li>
-                            </a>
-                          ))}
-                      </ul>
-                      <div className="flex">
-                        <button
-                          onClick={() => toast.dismiss(t.id)}
-                          className="w-full border border-transparent rounded-sm p-4 flex items-center justify-center text-sm font-medium text-blue-500 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        >
-                          Close
-                        </button>
+                  toast(
+                    (t) => (
+                      <div className="flex flex-col ">
+                        <p className="text-sm font-lg text-gray-900 text-center p-4 dark:text-white">
+                          Recent Lists
+                        </p>
+                        <ul>
+                          {list
+                            .slice(-5)
+                            .reverse()
+                            .map((listItem) => (
+                              <a href={listItem.href} key={listItem.href}>
+                                <li className="flex flex-col items-center justify-center p-4 hover:underline hover:bg-slate-100 cursor-pointer">
+                                  {listItem.slug}
+                                </li>
+                              </a>
+                            ))}
+                        </ul>
+                        <div className="flex">
+                          <button
+                            onClick={() => toast.dismiss(t.id)}
+                            className="w-full border border-transparent rounded-sm p-4 flex items-center justify-center text-sm font-medium text-blue-500 hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:text-white dark:focus:ring-white"
+                          >
+                            Close
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ));
+                    ),
+                    {
+                      duration: Infinity,
+                      style: {
+                        backgroundColor: isDarkMode ? "#1F2937" : "white",
+                        border: isDarkMode ? "2px solid white" : "",
+                      },
+                    }
+                  );
                 }}
               />
             </div>
