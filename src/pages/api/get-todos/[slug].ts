@@ -15,8 +15,7 @@ export default async function handle(req, res) {
         slugId: foundSlug.id,
       },
     });
-    res.json(todos);
-  } else {
-    res.status(200).json({ message: "No todos found for slug: " + slug });
+    return res.json(todos);
   }
+  res.json([]);
 }

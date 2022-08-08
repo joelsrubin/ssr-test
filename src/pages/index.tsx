@@ -19,10 +19,11 @@ export type TListItem = {
   slug: string;
 };
 
-const Home = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) => {
-  const [slug, setSlug] = useState<undefined | string>();
+const Home = ({
+  data: serverSideTodos,
+  slug: serverSideSlug,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [slug, setSlug] = useState<undefined | string>(serverSideSlug);
   const [list, setList] = useLocalStorage<TListItem[]>("slugList", []);
   const [colorMode, rawSetColorMode] = useState<string | undefined>(undefined);
 
@@ -45,7 +46,7 @@ const Home = (
     ["todos"],
     () => getTodos(slug),
     {
-      initialData: props.data,
+      initialData: serverSideTodos,
       enabled: !!slug,
       refetchOnWindowFocus: false,
     }
@@ -106,16 +107,14 @@ const Home = (
 
   useEffect(
     function establishQueryParams() {
-      if (router.asPath === "/") {
+      if (!slug) {
         const newSlug = generateSlug(3);
         router.query.slug = newSlug;
         router.push(router);
         setSlug(newSlug);
-      } else {
-        setSlug(router.query.slug as string);
       }
     },
-    [router]
+    [slug, router]
   );
 
   return (
@@ -165,20 +164,21 @@ export async function getServerSideProps(context) {
     return { props: { data: [] } };
   }
   const server = dev
-    ? "http://localhost:3000/"
-    : "https://ssr-test-seven.vercel.app/";
+    ? "http://localhost:3000"
+    : "https://ssr-test-seven.vercel.app";
 
-  const res = await fetch(`${server}/api/get-todos/${slug}`);
-  const data: ToDo[] = await res.json();
-  //@ts-ignore
-  if (data.message) {
-    return { props: { data: [] } };
+  try {
+    const res = await fetch(`${server}/api/get-todos/${slug}`);
+    const data: ToDo[] = await res.json();
+    return {
+      props: {
+        data,
+        slug,
+      },
+    };
+  } catch {
+    throw new Error("Something went wrong");
   }
-  return {
-    props: {
-      data,
-    },
-  };
 }
 
 export default Home;
