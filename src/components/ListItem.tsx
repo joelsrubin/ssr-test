@@ -31,9 +31,6 @@ const ListItem = forwardRef<ToDo | null, TListItem>(
           >
             <IconGripVertical size={25} color={"gray"} />
           </div>
-          <Tooltip message="hello">
-            <></>
-          </Tooltip>
           <div
             className={`cursor-pointer p-4 pt-5 ${
               todo.completed && "line-through decoration-4 text-gray-500"
