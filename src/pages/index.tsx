@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { InferGetServerSidePropsType, NextPage } from "next";
 import Head from "next/head";
 
 import { List, ToDo } from "../components/List";
@@ -7,12 +7,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { generateSlug } from "random-word-slugs";
 import { useLocalStorage, useDarkMode } from "usehooks-ts";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { IconSun, IconMoonStars, IconShare, IconFolder } from "@tabler/icons";
 
 import { deleteTodo, getTodos, updateTodo } from "../services";
-import { metaObj, styleObj } from "../constants";
+import { metaObj } from "../constants";
 import Navbar from "../components/Navbar";
 
 export type TListItem = {
@@ -20,14 +19,15 @@ export type TListItem = {
   slug: string;
 };
 
-const Home: NextPage = () => {
+const Home = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
   const [slug, setSlug] = useState<undefined | string>();
   const [list, setList] = useLocalStorage<TListItem[]>("slugList", []);
   const [colorMode, rawSetColorMode] = useState<string | undefined>(undefined);
 
   const setColorMode = (value) => {
     rawSetColorMode(value);
-
     window.localStorage.setItem("color-mode", value);
     document.documentElement.setAttribute("class", value);
   };
@@ -45,6 +45,7 @@ const Home: NextPage = () => {
     ["todos"],
     () => getTodos(slug),
     {
+      initialData: props.data,
       enabled: !!slug,
       refetchOnWindowFocus: false,
     }
@@ -153,5 +154,31 @@ const Home: NextPage = () => {
     </>
   );
 };
+type TErrorMessage = {
+  message: string;
+};
+export async function getServerSideProps(context) {
+  const { slug } = context.query;
+
+  const dev = process.env.NODE_ENV !== "production";
+  if (!slug) {
+    return { props: { data: [] } };
+  }
+  const server = dev
+    ? "http://localhost:3000/"
+    : "https://ssr-test-seven.vercel.app/";
+
+  const res = await fetch(`${server}/api/get-todos/${slug}`);
+  const data: ToDo[] = await res.json();
+  //@ts-ignore
+  if (data.message) {
+    return { props: { data: [] } };
+  }
+  return {
+    props: {
+      data,
+    },
+  };
+}
 
 export default Home;

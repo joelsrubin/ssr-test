@@ -4,8 +4,8 @@ export const styleObj = {
 };
 
 export const emojiObj = {
-  light: "😎",
   dark: "🫥",
+  light: "😎",
 };
 
 export const metaObj = {
