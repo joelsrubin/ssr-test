@@ -41,7 +41,7 @@ const Home: NextPage = () => {
   const isDarkMode = colorMode === "dark";
   const client = useQueryClient();
   const router = useRouter();
-  const { data: _globalTodos } = useQuery<ToDo[]>(
+  const { data: _globalTodos, isLoading: isLoadingData } = useQuery<ToDo[]>(
     ["todos"],
     () => getTodos(slug),
     {
@@ -145,6 +145,7 @@ const Home: NextPage = () => {
             updatePrioritiesAsync={updatePrioritiesAsync}
             isDarkMode={isDarkMode}
             colorMode={colorMode}
+            isLoading={isLoadingData}
           />
         </div>
       </main>
