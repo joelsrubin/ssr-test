@@ -58,14 +58,14 @@ export function Input({
 
   return (
     <form onSubmit={mutate}>
-      <div className="dark:bg-gradient-to-r dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500 flex flex-row justify-between bg-gradient-to-r from-cyan-200 to-blue-300 placeholder-gray-200">
+      <div className="flex flex-row justify-between bg-gradient-to-r from-cyan-200 to-blue-300 placeholder-gray-200 dark:bg-gradient-to-r dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500">
         <input
           type="text"
           name="text"
           placeholder="What's next?"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="leading-8 inherit outline-none bg-transparent p-4 w-3/4 dark:selection:bg-black selection:bg-slate-200 dark:placeholder:text-white"
+          className="inherit w-3/4 bg-transparent p-4 leading-8 outline-none selection:bg-slate-200 dark:selection:bg-black dark:placeholder:text-white"
           spellCheck={false}
         />
 
@@ -80,7 +80,7 @@ export function Input({
         ) : (
           <button
             type="submit"
-            className="hover:scale-110 duration-200 p-4 shrink-0"
+            className="shrink-0 p-4 duration-200 hover:scale-110"
           >
             <IconPencilPlus />
           </button>

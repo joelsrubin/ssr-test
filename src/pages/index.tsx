@@ -13,6 +13,7 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { deleteTodo, getTodos, updateTodo } from "../services";
 import { metaObj } from "../constants";
 import Navbar from "../components/Navbar";
+import { createQueryKeys } from "@lukemorales/query-key-factory";
 
 export type TListItem = {
   href: string;
@@ -38,12 +39,12 @@ const Home = ({
     const initialColorValue = root.getAttribute("class");
     rawSetColorMode(initialColorValue!);
   }, []);
-
+  const todoKeys = createQueryKeys("todos");
   const isDarkMode = colorMode === "dark";
   const client = useQueryClient();
   const router = useRouter();
   const { data: _globalTodos, isLoading: isLoadingData } = useQuery<ToDo[]>(
-    ["todos"],
+    todoKeys.default,
     () => getTodos(slug),
     {
       initialData: serverSideTodos,
@@ -65,14 +66,14 @@ const Home = ({
     },
     {
       onSuccess: (updatedTodos) => {
-        client.setQueryData(["todos"], updatedTodos);
+        client.setQueryData(todoKeys.default, updatedTodos);
       },
     }
   );
 
   const { mutate: updateTodoAsync } = useMutation(updateTodo, {
     onMutate: async (newTodo) => {
-      await client.cancelQueries(["todos"]);
+      await client.cancelQueries(todoKeys.default);
 
       let listWithoutUpdated = [..._globalTodos!].filter(
         (todo) => todo.id !== newTodo.id
@@ -82,20 +83,20 @@ const Home = ({
         completed: newTodo.completed,
       });
 
-      client.setQueryData(["todos"], listWithoutUpdated);
+      client.setQueryData(todoKeys.default, listWithoutUpdated);
     },
     onSettled: async () => {
-      await client.invalidateQueries(["todos"]);
+      await client.invalidateQueries(todoKeys.default);
     },
   });
 
   const { mutate: deleteTodoAsync } = useMutation(deleteTodo, {
     onMutate: async (deleteTodo) => {
-      await client.cancelQueries(["todos"]);
+      await client.cancelQueries(todoKeys.default);
       const nextTodos = _globalTodos?.filter(
         (todo) => todo.id !== deleteTodo.id
       );
-      client.setQueryData(["todos"], nextTodos);
+      client.setQueryData(todoKeys.default, nextTodos);
       return nextTodos;
     },
     onSettled: async (nextTodos) => {
@@ -126,7 +127,7 @@ const Home = ({
         <link rel="icon" href="/trashcan.svg" />
         <meta name="theme-color" content={metaObj[colorMode!]} />
       </Head>
-      <main className="flex flex-col mx-auto min-h-screen justify-start dark:bg-black transition-colors duration-500">
+      <main className="mx-auto flex min-h-screen flex-col justify-start transition-colors duration-500 dark:bg-black">
         <Navbar
           colorMode={colorMode}
           slug={slug}
@@ -134,7 +135,7 @@ const Home = ({
           list={list}
           setColorMode={setColorMode}
         />
-        <div className="flex flex-col w-full h-3/4 pt-20">
+        <div className="flex h-3/4 w-full flex-col pt-20">
           <List
             todos={_globalTodos}
             handleDone={updateTodoAsync}

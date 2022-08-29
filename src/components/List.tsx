@@ -100,8 +100,8 @@ export const List: React.FC<TListProps> = ({
   }, [sortableList, updatePrioritiesAsync]);
 
   return (
-    <div className="w-full flex flex-col items-center h-3/4 max-h-3/4 select-none justify-center">
-      <ul className="text-lg mx-auto border rounded-md w-3/4 md:w-1/2 sm:w-1/2 lg:w-1/2 overflow-auto shadow-md gap-2 dark:shadow-sm dark:shadow-slate-100 ">
+    <div className="max-h-3/4 flex h-3/4 w-full select-none flex-col items-center justify-center">
+      <ul className="mx-auto w-3/4 gap-2 overflow-auto rounded-md border text-lg shadow-md dark:shadow-sm dark:shadow-slate-100 sm:w-1/2 md:w-1/2 lg:w-1/2 ">
         <li>
           <Input
             slug={slug}

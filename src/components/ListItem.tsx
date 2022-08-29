@@ -15,17 +15,17 @@ const ListItem = forwardRef<ToDo | null, TListItem>(
   ({ isDragging, todo, deleteTodo, handleDone }, dragNode) => {
     return (
       <li
-        className={`flex flex-row w-full justify-between border-y-2 border-gray-200 ${
+        className={`flex w-full flex-row justify-between border-y-2 border-gray-200 ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         } ${
           typeof dragNode !== "function" &&
           dragNode!.current === todo &&
-          "bg-gray-200 opacity-50 z-10"
+          "z-10 bg-gray-200 opacity-50"
         } ${!isDragging && "hover:bg-gray-100"} dark:bg-black dark:text-white`}
       >
         <div className="flex flex-row">
           <div
-            className={`flex justify-center items-center ${
+            className={`flex items-center justify-center ${
               isDragging ? "cursor-grabbing" : "cursor-grab"
             } cursor-pointer pl-2`}
           >
@@ -33,7 +33,7 @@ const ListItem = forwardRef<ToDo | null, TListItem>(
           </div>
           <div
             className={`cursor-pointer p-4 pt-5 ${
-              todo.completed && "line-through decoration-4 text-gray-500"
+              todo.completed && "text-gray-500 line-through decoration-4"
             } transition-colors duration-500`}
             onClick={() => handleDone({ ...todo, completed: !todo.completed })}
             dangerouslySetInnerHTML={{
@@ -41,9 +41,9 @@ const ListItem = forwardRef<ToDo | null, TListItem>(
             }}
           />
         </div>
-        <div className="flex flex-row p-4 min-h-25 min-w-25 shrink-0">
+        <div className="min-h-25 min-w-25 flex shrink-0 flex-row p-4">
           <button className="cursor-pointer" onClick={() => deleteTodo(todo)}>
-            <IconTrash className="min-h-25 min-w-25 shrink-0 hover:scale-110 duration-200 dark:white" />
+            <IconTrash className="min-h-25 min-w-25 dark:white shrink-0 duration-200 hover:scale-110" />
           </button>
         </div>
       </li>
